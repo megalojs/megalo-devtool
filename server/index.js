@@ -1,4 +1,3 @@
-const { port } = require('./env');
 const Koa = require('koa');
 const json = require('koa-json');
 const logger = require('koa-logger');
@@ -8,9 +7,11 @@ const koaRouter = require('koa-router');
 const koaBodyparser = require('koa-bodyparser');
 const devRoute = require('./route');
 
+const client = require('./client');
 const app = new Koa();
 const router = koaRouter()
 const http = require('http');
+const websocket = require('./websocket');
 
 app.use(koaBodyparser())
 app.use(json())
@@ -29,23 +30,19 @@ app.on('error', function (err, ctx) {
 
 router.use('/dev', devRoute.routes());
 app.use(router.routes());
-app.use(serve(path.resolve('dist')));
+app.use(serve(path.resolve(__dirname, './public')));
+router.get('/', client.index);
 
 const server = http.createServer(app.callback());
+websocket.install(app, server);
 
+function start(port = 12222) {
+  server.listen(port, '0.0.0.0', (...args) => {
+    console.log(`listening on ${port}`)
+  });
+  return server;
+}
 
-
-const pageManager = require('./page-manager');
-const io = require('socket.io')(server);
-
-io.on('connection', function(client) {
-  const pages = pageManager.all();
-  console.log(`client connected ${client.id}`)
-  client.emit('allpage', pages)
-});
-
-Object.assign(app, { io });
-
-server.listen(port, '0.0.0.0', (...args) => {
-  console.log(`listening on ${port}`)
-});
+module.exports = {
+  start
+};

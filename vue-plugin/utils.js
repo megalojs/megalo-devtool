@@ -1,4 +1,8 @@
-const url = 'http://127.0.0.1:12222/dev'
+const host = MEGALO_DEVTOOL_HOST || '127.0.0.1';
+const port = MEGALO_DEVTOOL_PORT || 12222;
+const url = `http://${host}:${port}/dev`
+
+console.log(`[megalo devtool]: connect to ${url}`);
 
 function send(data) {
   return new Promise((resolve, reject) => {
@@ -11,55 +15,6 @@ function send(data) {
       }
     })
   })
-}
-
-module.exports = {
-  install(Vue, options) {
-    Vue.mixin({
-      onLaunch() {
-        send({
-          lifecycle: 'launch',
-          type: 'app'
-        })
-      },
-      onLoad() {
-        send({
-          lifecycle: 'load',
-          type: this === this.$root ? 'page' : 'vm'
-        })
-      },
-      mounted() {
-        if (this.$mp.page && this === this.$root) {
-          const vm = collectVMInfo(this);
-          send({
-            lifecycle: 'mounted',
-            type: 'page',
-            data: vm
-          });
-        }
-      },
-      updated() {
-        if (this.$mp.page) {
-          const vm = collectVMInfo(this);
-          send({
-            lifecycle: 'updated',
-            type: 'vm',
-            data: vm
-          });
-        }
-      },
-      beforeDestroy() {
-        if (this.$mp.page && this === this.$root) {
-          const vm = collectVMInfo(this);
-          send({
-            lifecycle: 'beforeDestroy',
-            type: 'page',
-            data: vm,
-          });
-        }
-      },
-    })
-  }
 }
 
 function collectVMInfo(vm) {
@@ -135,3 +90,11 @@ function collectVNode(vnode) {
 function resolveComponentName(name) {
   return (name || '').replace(/vue-component-\d+-/, '');
 }
+
+module.exports = {
+  send,
+  resolveComponentName,
+  collectVMComputed,
+  collectVMInfo,
+  collectVNode,
+};
