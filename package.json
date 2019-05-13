@@ -1,13 +1,14 @@
 {
   "name": "@megalo/devtool",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "",
   "main": "run.js",
   "scripts": {
     "start": "npm run start:server & npm run start:client",
     "debug": "node --inspect-brk ./run.js",
     "start:server": "node ./run.js",
-    "start:client": "npm run serve --prefix=./client"
+    "start:client": "npm run serve --prefix=./client",
+    "prepublishOnly": "npm run build --prefix=./client"
   },
   "author": "",
   "license": "ISC",
@@ -25,5 +26,8 @@
   },
   "peerDependencies": {
     "webpack": "^4"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
