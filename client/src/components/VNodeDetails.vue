@@ -27,7 +27,7 @@ export default {
     },
   },
   created() {
-    console.log('vnode', this.vnode);
+    // console.log('vnode', this.vnode);
   },
 };
 </script>

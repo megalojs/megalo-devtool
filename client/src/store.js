@@ -18,6 +18,15 @@ export default new Vuex.Store({
         pages,
       });
     },
+    addPage(state, page) {
+      state.pages.unshift(page);
+    },
+    removePage(state, target) {
+      const index = state.pages.findIndex(page => page.pageInfo.id === target.pageInfo.id);
+      if (index >= 0) {
+        state.pages.splice(index, 1);
+      }
+    },
     updateSelectedVM(state, vm) {
       Object.assign(state, {
         selectedVM: vm,
@@ -25,17 +34,15 @@ export default new Vuex.Store({
     },
     updateSelectedVNode(state, vnode) {
       Object.assign(state, {
-        selectedVNode: vnode,
+        selectedVNode: vnode || {},
       });
     },
     updateCurrentRootVM(state, vm) {
-      console.log('current', vm);
       Object.assign(state, {
         currentRootVM: vm,
       });
     },
     updateVM(state, vm) {
-      console.log('update vm', vm);
       const { pages } = state;
       const targetRrooVM = pages.find(rootVM => (
         rootVM.pageInfo.id === vm.pageInfo.id
@@ -49,16 +56,31 @@ export default new Vuex.Store({
   actions: {
     refreshPages({ commit }, pages) {
       commit('refreshPages', pages);
-      commit('updateCurrentRootVM', pages[0]);
-      commit('updateSelectedVM', pages[0]);
-      commit('updateSelectedVNode', pages[0].vnode);
+      const currentRootVM = pages[0];
+      commit('updateCurrentRootVM', currentRootVM);
+      commit('updateSelectedVM', currentRootVM);
+      commit('updateSelectedVNode', currentRootVM && currentRootVM.vnode);
+    },
+    addPage({ commit }, page) {
+      commit('addPage', page);
+      const currentRootVM = page;
+      commit('updateCurrentRootVM', currentRootVM);
+      commit('updateSelectedVM', currentRootVM);
+      commit('updateSelectedVNode', currentRootVM && currentRootVM.vnode);
+    },
+    removePage({ commit, state }, page) {
+      commit('removePage', page);
+      const currentRootVM = state.pages[0];
+      commit('updateCurrentRootVM', currentRootVM);
+      commit('updateSelectedVM', currentRootVM);
+      commit('updateSelectedVNode', currentRootVM && currentRootVM.vnode);
     },
     updateCurrentRootVM({ commit }, vm) {
       commit('updateCurrentRootVM', vm);
     },
     updateSelectedVM({ commit }, vm) {
       commit('updateSelectedVM', vm);
-      commit('updateSelectedVNode', vm.vnode);
+      commit('updateSelectedVNode', vm && vm.vnode);
     },
     updateSelectedVNode({ commit }, vnode) {
       commit('updateSelectedVNode', vnode);

@@ -13,6 +13,8 @@ async function dev(ctx) {
     pageManager.addPage(reqData.data.pageInfo.id, reqData.data);
   } else if (reqData.lifecycle === 'updated') {
     pageManager.updateVM(reqData.data.pageInfo.id, reqData.data);
+  } else if (reqData.lifecycle === 'beforeDestroy' && reqData.type === 'page') {
+    pageManager.removePage(reqData.data.pageInfo.id, reqData.data);
   }
 
   ctx.body = {

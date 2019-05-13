@@ -18,7 +18,7 @@
       <span style="color:#ccc;">&gt;</span>
     </span>
   </div>
-  <template v-if="open && vm.children">
+  <template v-if="open && vm && vm.children">
     <VMBox
       v-for="child in vm.children"
       :key="child.id"

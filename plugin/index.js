@@ -18,39 +18,42 @@ module.exports = {
     Vue.mixin({
       onLaunch() {
         send({
-          lifecycle: 'launch'
+          lifecycle: 'launch',
+          type: 'app'
         })
       },
       onLoad() {
         send({
-          lifecycle: 'load'
+          lifecycle: 'load',
+          type: this === this.$root ? 'page' : 'vm'
         })
       },
       mounted() {
-        console.log(this)
         if (this.$mp.page && this === this.$root) {
           const vm = collectVMInfo(this);
           send({
             lifecycle: 'mounted',
-            type: 'rootVM',
+            type: 'page',
             data: vm
           });
         }
       },
       updated() {
-        const vm = collectVMInfo(this);
-        send({
-          lifecycle: 'updated',
-          type: 'vm',
-          data: vm
-        });
+        if (this.$mp.page) {
+          const vm = collectVMInfo(this);
+          send({
+            lifecycle: 'updated',
+            type: 'vm',
+            data: vm
+          });
+        }
       },
       beforeDestroy() {
         if (this.$mp.page && this === this.$root) {
-          console.log('beforeDestroy', this)
+          const vm = collectVMInfo(this);
           send({
             lifecycle: 'beforeDestroy',
-            type: 'vm',
+            type: 'page',
             data: vm,
           });
         }
@@ -64,6 +67,7 @@ function collectVMInfo(vm) {
   if (vm.$mp.page) {
     const page = vm.$mp.page;
     pageInfo = {
+      webviewId: page.data.__webviewId__,
       id: page.__wxExparserNodeId__,
       path: page.is,
       wxExparserNodeId: page.__wxExparserNodeId__
