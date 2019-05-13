@@ -1,0 +1,25 @@
+{
+  "name": "megalo-dev",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "npm run start:server & npm run start:client",
+    "debug": "node --inspect-brk ./server/index.js",
+    "start:server": "node ./server/index.js",
+    "start:client": "npm run serve --prefix=./client"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "koa": "^2.7.0",
+    "koa-bodyparser": "^4.2.1",
+    "koa-json": "^2.0.2",
+    "koa-logger": "^3.2.0",
+    "koa-router": "^7.4.0",
+    "koa-static": "^5.0.0",
+    "koa-websocket": "^5.0.1",
+    "socket.io": "^2.2.0",
+    "sockjs": "^0.3.19"
+  }
+}
