@@ -5,10 +5,12 @@
       label="data"
       :data="vm.data"
     />
+    <div class="divider"></div>
     <JSONBox
       label="props"
       :data="vm.props"
     />
+    <div class="divider"></div>
     <JSONBox
       label="computed"
       :data="vm.computed"
@@ -33,8 +35,12 @@ export default {
 };
 </script>
 
-<style>
+<style lang="less">
 .vmdetails {
   width: 300px;
+  .divider {
+    border-bottom: 1px solid #ddd;
+    margin: 10px 0;
+  }
 }
 </style>

@@ -5,6 +5,7 @@
       label="data"
       :data="vnode.data"
     />
+    <div class="divider"></div>
     <JSONBox
       label="children"
       :data="vnode.children"
@@ -32,8 +33,12 @@ export default {
 };
 </script>
 
-<style>
+<style lang="less">
 .vnodedetails {
   width: 300px;
+  .divider {
+    border-bottom: 1px solid #ddd;
+    margin: 10px 0;
+  }
 }
 </style>

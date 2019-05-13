@@ -41,6 +41,7 @@
 </template>
 
 <script>
+const DEFAULT_OPEN_MAX = 1;
 function captilize(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
@@ -76,7 +77,7 @@ export default {
   },
   data() {
     return {
-      open: !this.depth || this.depth < 5,
+      open: !this.depth || this.depth < DEFAULT_OPEN_MAX,
     };
   },
 };
