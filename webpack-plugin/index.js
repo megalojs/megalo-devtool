@@ -20,7 +20,7 @@ class DevtoolPlugin {
     });
 
     compiler.hooks.beforeCompile.tap('MegaloDevtoolPlugin', ( compiler ) => {
-      devtoolServer = require('../server').start();
+      devtoolServer = require('../server').start(this.port);
     });
   }
 }
