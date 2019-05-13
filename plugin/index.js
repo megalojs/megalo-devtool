@@ -80,6 +80,7 @@ function collectVMInfo(vm) {
     name: 'unknown',
     props: vm._props,
     data: vm._data,
+    computed: collectVMComputed(vm),
     children: [],
     vnode: collectVNode(vm._vnode)
   };
@@ -101,6 +102,17 @@ function collectVMInfo(vm) {
     info.forId = f_ || null;
   }
   return info;
+}
+
+function collectVMComputed(vm) {
+  let res = {};
+  if (vm._computedWatchers) {
+    res = Object.keys(vm._computedWatchers).reduce((res, key) => {
+      res[key] = vm._computedWatchers[key].value;
+      return res;
+    }, res);
+  }
+  return res;
 }
 
 function collectVNode(vnode) {
