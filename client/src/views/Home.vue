@@ -97,18 +97,20 @@ export default {
 
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .head {
   height: 50px;
   display: flex;
   justify-content: flex-start;
   align-items: flex-start;
   padding: 10px;
+  border-bottom: 1px solid #ddd;
 }
 .home {
   height: 100%;
   overflow: hidden;
   box-sizing: border-box;
+  text-align: left;
 }
 .wrap {
   display: flex;
@@ -118,7 +120,7 @@ export default {
   &.panel {
     >div {
       box-sizing: border-box;
-      padding: 10px;
+      // padding: 10px;
       overflow: auto;
     }
     >div:not(:last-child) {

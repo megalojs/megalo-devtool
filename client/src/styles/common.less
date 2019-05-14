@@ -1,0 +1,23 @@
+.divider {
+  border-bottom: 1px solid #ddd;
+  margin: 10px 0;
+}
+
+.arrow-wrapper {
+  position: absolute;
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  top: -1px;
+  left: 6px;
+  .arrow {
+    display: inline-block;
+    transition: transform 0.1s ease;
+    border-top: 4px solid transparent;
+    border-bottom: 4px solid transparent;
+    border-left: 6px solid #2c3e50;
+    &.rotated {
+      transform: rotate(90deg);
+    }
+  }
+}

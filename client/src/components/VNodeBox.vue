@@ -3,7 +3,7 @@
   <div
     class="vnodebox_tagname_wrapper"
     :style="{ 'padding-left': `${depth*10}px` }"
-    :class="{ hover: hover }"
+    :class="{ hover: hover, selected: $store.state.selectedVNode === vnode }"
     @mouseenter="hover = true"
     @mouseleave="hover = false"
     @click="onSelect"
@@ -13,7 +13,9 @@
         <span class="arrow-wrapper" @click="open = !open">
           <span class="arrow" :class="{ rotated: open }"></span>
         </span>
-        &lt;{{ vnode.tag || 'unknown' }}&gt;
+        <span style="color:#ccc">&lt;</span>
+        <span>{{ vnode.tag || 'unknown' }}</span>
+        <span style="color:#ccc">&gt;</span>
       </template>
       <template
         v-else-if="vnode && vnode.text"
@@ -35,6 +37,8 @@
 </template>
 
 <script>
+import '../styles/common.less';
+
 export default {
   name: 'VNodeBox',
   props: {
@@ -68,33 +72,18 @@ export default {
   text-align: left;
   &_tagname_wrapper {
     color: #42b983;
-    font-weight: 600;
+    font-weight: 500;
     cursor: pointer;
   }
   &_tagname {
     position: relative;
     padding-left: 15px;
   }
+  .selected {
+    background: #f7e45dad;
+  }
   .hover {
     background: #f7e45d;
-  }
-  .arrow-wrapper {
-    position: absolute;
-    display: inline-block;
-    width: 16px;
-    height: 16px;
-    top: -1px;
-    left: 6px;
-    .arrow {
-      display: inline-block;
-      transition: transform 0.1s ease;
-      border-top: 4px solid transparent;
-      border-bottom: 4px solid transparent;
-      border-left: 6px solid #2c3e50;
-      &.rotated {
-        transform: rotate(90deg);
-      }
-    }
   }
 }
 </style>

@@ -63,7 +63,6 @@ export default {
 <style lang="less" scoped>
 .vmbox {
   text-align: left;
-  // padding-left: 10px;
   &_tagname_wrapper {
     cursor: pointer;
     color: #42b983;
@@ -72,24 +71,6 @@ export default {
   &_tagname {
     position: relative;
     padding-left: 15px;
-    .arrow-wrapper {
-      position: absolute;
-      display: inline-block;
-      width: 16px;
-      height: 16px;
-      top: -1px;
-      left: 6px;
-      .arrow {
-        display: inline-block;
-        transition: transform 0.1s ease;
-        border-top: 4px solid transparent;
-        border-bottom: 4px solid transparent;
-        border-left: 6px solid #2c3e50;
-        &.rotated {
-          transform: rotate(90deg);
-        }
-      }
-    }
   }
   .selected {
     background: #f7e45dad;

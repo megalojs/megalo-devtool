@@ -41,6 +41,8 @@
 </template>
 
 <script>
+import '../styles/common.less';
+
 const DEFAULT_OPEN_MAX = 1;
 function captilize(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
@@ -83,31 +85,12 @@ export default {
 };
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .jsonbox {
   text-align: left;
   position: relative;
   .label {
     color: #881391;
-  }
-  .arrow-wrapper {
-    position: absolute;
-    display: inline-block;
-    width: 16px;
-    height: 16px;
-    top: -1px;
-    left: 6px;
-    cursor: pointer;
-    .arrow {
-      display: inline-block;
-      transition: transform 0.1s ease;
-      border-top: 4px solid transparent;
-      border-bottom: 4px solid transparent;
-      border-left: 6px solid #2c3e50;
-      &.rotated {
-        transform: rotate(90deg);
-      }
-    }
   }
 }
 </style>

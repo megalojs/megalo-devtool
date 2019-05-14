@@ -1,6 +1,9 @@
 <template>
 <div class="vnodedetails">
   <div v-if="vnode">
+    <span style="color:#ccc;">&lt;</span>
+    <span style="color:#42b983">{{ vnode.tag }}</span>
+    <span style="color:#ccc;">&gt;</span>
     <JSONBox
       label="data"
       :data="vnode.data"
