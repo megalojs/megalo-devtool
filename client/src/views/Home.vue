@@ -43,7 +43,13 @@ import VNodeBox from '../components/VNodeBox.vue';
 import VMDetails from '../components/VMDetails.vue';
 import VNodeDetails from '../components/VNodeDetails.vue';
 
-const socket = io(`http://${window.location.host}`);
+const socket = io(
+  // `http://${window.location.host}/ui`,
+  'http://127.0.0.1:12222/ui',
+  {
+    transports: ['websocket'],
+  },
+);
 
 export default {
   name: 'home',

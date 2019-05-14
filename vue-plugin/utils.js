@@ -1,22 +1,3 @@
-const host = MEGALO_DEVTOOL_HOST || '127.0.0.1';
-const port = MEGALO_DEVTOOL_PORT || 12222;
-const url = `http://${host}:${port}/dev`
-
-console.log(`[megalo devtool]: connect to ${url}`);
-
-function send(data) {
-  return new Promise((resolve, reject) => {
-    wx.request({
-      url,
-      method: 'post',
-      data,
-      success(res) {
-        resolve(res)
-      }
-    })
-  })
-}
-
 function collectVMInfo(vm) {
   let pageInfo = {};
   if (vm.$mp.page) {
@@ -91,10 +72,21 @@ function resolveComponentName(name) {
   return (name || '').replace(/vue-component-\d+-/, '');
 }
 
+function resolveMPType(vm) {
+  if (!vm) {
+    return 'unknown';
+  } else if (vm.$mp.page && vm === vm.$root) {
+    return 'page';
+  } else if (vm.$mp.app && vm === vm.$root) {
+    return 'app';
+  }
+  return 'vm';
+}
+
 module.exports = {
-  send,
   resolveComponentName,
   collectVMComputed,
   collectVMInfo,
   collectVNode,
+  resolveMPType
 };

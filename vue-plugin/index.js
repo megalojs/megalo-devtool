@@ -1,6 +1,6 @@
+const { send } = require('./request');
 const {
-  send,
-  resolve,
+  resolveMPType,
   collectVMComputed,
   collectVMInfo,
   collectVNode,
@@ -13,20 +13,22 @@ module.exports = {
         send({
           lifecycle: 'launch',
           type: 'app'
-        })
+        });
       },
       onLoad() {
+        // new page load
         send({
           lifecycle: 'load',
-          type: this === this.$root ? 'page' : 'vm'
-        })
+          type: resolveMPType(this)
+        });
       },
       mounted() {
-        if (this.$mp.page && this === this.$root) {
+        const type = resolveMPType(this);
+        if (type === 'page') {
           const vm = collectVMInfo(this);
           send({
             lifecycle: 'mounted',
-            type: 'page',
+            type,
             data: vm
           });
         }
@@ -42,11 +44,12 @@ module.exports = {
         }
       },
       beforeDestroy() {
-        if (this.$mp.page && this === this.$root) {
+        const type = resolveMPType(this);
+        if (type === 'page') {
           const vm = collectVMInfo(this);
           send({
             lifecycle: 'beforeDestroy',
-            type: 'page',
+            type,
             data: vm,
           });
         }
