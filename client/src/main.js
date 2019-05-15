@@ -4,8 +4,8 @@ import router from './router';
 import socket from './socket';
 import store from './store';
 
-// const url = `http://${window.location.host}/ui`;
-const url = 'http://127.0.0.1:12222/ui';
+const url = process.env.NODE_ENV === 'production' ? `http://${window.location.host}/ui`
+  : 'http://127.0.0.1:12222/ui';
 
 Vue.config.productionTip = false;
 
