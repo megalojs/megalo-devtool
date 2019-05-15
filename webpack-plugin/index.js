@@ -10,6 +10,9 @@ class DevtoolPlugin {
     this.host = options.host || ipAddress || '127.0.0.1';
   }
   apply(compiler) {
+    compiler.hooks.entryOption.tap('MegaloDevtoolPlugin', ( compiler ) => {
+      devtoolServer = require('../server').start(this.port);
+    });
     compiler.hooks.afterPlugins.tap('MegaloDevtoolPlugin', ( compiler ) => {
       compiler.options.plugins.push(
         new webpack.DefinePlugin({
@@ -19,9 +22,6 @@ class DevtoolPlugin {
       );
     });
 
-    compiler.hooks.beforeCompile.tap('MegaloDevtoolPlugin', ( compiler ) => {
-      devtoolServer = require('../server').start(this.port);
-    });
   }
 }
 
