@@ -86,6 +86,7 @@ export default {
 }
 .wrap {
   display: flex;
+  width: 100%;
   height: 100%;
   align-items: stretch;
   justify-content: flex-start;
@@ -94,6 +95,7 @@ export default {
       box-sizing: border-box;
       // padding: 10px;
       overflow: auto;
+      flex: 1;
     }
     >div:not(:last-child) {
       border-right: 1px solid #ddd;

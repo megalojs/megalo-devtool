@@ -1,13 +1,11 @@
 <template>
 <div class="vmdetails">
-  <template v-if="vm">
-    <div class="head">
-      <span style="color:#ccc;">&lt;</span>
-      <span style="color:#42b983">{{ vm.name || 'Root' }}</span>
-      <span style="color:#ccc;">&gt;</span>
-    </div>
-
-    <div style="padding:8px;">
+  <DetailBox>
+    <span v-if="vm" slot="head">
+      {{ vm.name || 'Root' }}
+    </span>
+    
+    <div v-if="vm" slot="body">
       <JSONBox
         label="data"
         :data="vm.data"
@@ -23,16 +21,18 @@
         :data="vm.computed"
       />
     </div>
-  </template>
+  </DetailBox>
 </div>
 </template>
 
 <script>
+import DetailBox from './DetailBox.vue';
 import JSONBox from './JSONBox.vue';
 import '../styles/common.less';
 
 export default {
   components: {
+    DetailBox,
     JSONBox,
   },
   props: {
@@ -46,9 +46,6 @@ export default {
 
 <style lang="less" scoped>
 .vmdetails {
-  width: 300px;
-  .head {
-    border-bottom: 1px solid #ddd;
-  }
+  min-width: 300px;
 }
 </style>

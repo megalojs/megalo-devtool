@@ -10,9 +10,15 @@
   >
     <span class="vnodebox_tagname">
       <template v-if="vnode && vnode.tag">
-        <span class="arrow-wrapper" @click="open = !open">
+
+        <span
+          class="arrow-wrapper"
+          v-if="hasChildren"
+          @click="open = !open"
+        >
           <span class="arrow" :class="{ rotated: open }"></span>
         </span>
+
         <span style="color:#ccc">&lt;</span>
         <span>{{ vnode.tag || 'unknown' }}</span>
         <span style="color:#ccc">&gt;</span>
@@ -25,7 +31,7 @@
     </span>
   </div>
 
-  <template v-if="open && vnode && vnode.children">
+  <template v-if="open && hasChildren">
     <VNodeBox
       v-for="(child, i) in vnode.children"
       :depth="depth + 1"
@@ -49,6 +55,12 @@ export default {
     depth: {
       type: Number,
       default: 0,
+    },
+  },
+  computed: {
+    hasChildren() {
+      const host = this.vnode;
+      return host && host.children && host.children.length;
     },
   },
   data() {

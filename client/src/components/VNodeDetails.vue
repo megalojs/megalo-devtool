@@ -1,27 +1,32 @@
 <template>
 <div class="vnodedetails">
-  <div v-if="vnode">
-    <span style="color:#ccc;">&lt;</span>
-    <span style="color:#42b983">{{ vnode.tag }}</span>
-    <span style="color:#ccc;">&gt;</span>
-    <JSONBox
-      label="data"
-      :data="vnode.data"
-    />
-    <div class="divider"></div>
-    <JSONBox
-      label="children"
-      :data="vnode.children"
-    />
-  </div>
+  <DetailBox>
+    <span v-if="vnode" slot="head">
+      {{ vnode.tag || '' }}
+    </span>
+
+    <div v-if="vnode" slot="body">
+      <JSONBox
+        label="data"
+        :data="vnode.data"
+      />
+      <div class="divider"></div>
+      <JSONBox
+        label="children"
+        :data="vnode.children"
+      />
+    </div>
+  </DetailBox>
 </div>
 </template>
 
 <script>
+import DetailBox from './DetailBox.vue';
 import JSONBox from './JSONBox.vue';
 
 export default {
   components: {
+    DetailBox,
     JSONBox,
   },
   props: {
@@ -36,12 +41,8 @@ export default {
 };
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .vnodedetails {
-  width: 300px;
-  .divider {
-    border-bottom: 1px solid #ddd;
-    margin: 10px 0;
-  }
+  min-width: 300px;
 }
 </style>

@@ -10,7 +10,11 @@
     @click="onSelect"
   >
     <span class="vmbox_tagname">
-      <span class="arrow-wrapper" @click="open = !open">
+      <span
+        v-if="hasChildren"
+        class="arrow-wrapper"
+        @click="open = !open"
+      >
         <span class="arrow" :class="{ rotated: open }"></span>
       </span>
       <span style="color:#ccc;">&lt;</span>
@@ -18,7 +22,7 @@
       <span style="color:#ccc;">&gt;</span>
     </span>
   </div>
-  <template v-if="open && vm && vm.children">
+  <template v-if="open && hasChildren">
     <VMBox
       v-for="child in vm.children"
       :key="child.id"
@@ -47,6 +51,12 @@ export default {
       open: false,
       hover: false,
     };
+  },
+  computed: {
+    hasChildren() {
+      const host = this.vm;
+      return host && host.children && host.children.length;
+    },
   },
   methods: {
     onSelect() {
