@@ -1,4 +1,4 @@
-const doUpdateVM = require('../shared/update-vm');
+const doUpdateVM = require('../../shared/update-vm');
 
 let pages = {};
 
@@ -21,5 +21,5 @@ module.exports = {
   updateVM(id, vm) {
     const page = this.getPage(id);
     doUpdateVM(page, vm);
-  }
-}
+  },
+};

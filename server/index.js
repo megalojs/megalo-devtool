@@ -7,7 +7,7 @@ const router = require('./router');
 
 const app = new Koa();
 const http = require('http');
-const socketIO = require('./socket-io');
+const socketIO = require('./scoket-io');
 const log = require('./utils/log');
 
 app.use(koaBodyparser())

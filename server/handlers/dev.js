@@ -1,4 +1,4 @@
-const pageManager = require('../page-manager');
+const pageManager = require('./page-manager');
 
 const lifecycle = {
   launch() {
@@ -14,13 +14,15 @@ const lifecycle = {
     if (type === 'page') {
       pageManager.removePage(data.pageInfo.id, data);
     }
-  }
+  },
 };
 
-module.exports = async (io, data) => {
-  io.namespace.ui.emit('broadcast', data);
+module.exports = {
+  message({ io }, data) {
+    io.namespace.ui.emit('broadcast', data);
 
-  if (lifecycle[data.lifecycle]) {
-    lifecycle[data.lifecycle](data.type, data.data);
-  }
-}
+    if (lifecycle[data.lifecycle]) {
+      lifecycle[data.lifecycle](data.type, data.data);
+    }
+  },
+};

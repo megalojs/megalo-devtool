@@ -4,6 +4,7 @@
       <PageSelector
         :list="$store.state.pages"
       />
+      <button @click="onRefresh">refresh</button>
     </div>
     <div class="panel wrap">
       <div style="width:400px;">
@@ -34,22 +35,11 @@
 </template>
 
 <script>
-// @ is an alias to /src
-// import axios from 'axios';
-import io from 'socket.io-client';
 import PageSelector from '../components/PageSelector.vue';
 import VMBox from '../components/VMBox.vue';
 import VNodeBox from '../components/VNodeBox.vue';
 import VMDetails from '../components/VMDetails.vue';
 import VNodeDetails from '../components/VNodeDetails.vue';
-
-const socket = io(
-  // `http://${window.location.host}/ui`,
-  'http://127.0.0.1:12222/ui',
-  {
-    transports: ['websocket'],
-  },
-);
 
 export default {
   name: 'home',
@@ -66,38 +56,14 @@ export default {
       currentVM: {},
     };
   },
-  created() {
-    socket.on('connect', () => {
-      console.log('connect');
-    });
-
-    socket.on('broadcast', (data) => {
-      console.log('broadcast', data);
-      if (data.type === 'vm') {
-        this.$store.dispatch('updateVM', data.data);
-      } else if (data.lifecycle === 'launch') {
-        this.$store.dispatch('refreshPages', []);
-      } else if (data.lifecycle === 'mounted' && data.type === 'page') {
-        this.$store.dispatch('addPage', data.data);
-      } else if (data.lifecycle === 'beforeDestroy' && data.type === 'page') {
-        this.$store.dispatch('removePage', data.data);
-      }
-    });
-
-    socket.on('allpage', (allPages) => {
-      const pages = Object.keys(allPages)
-        .map(id => allPages[id]);
-
-      this.$store.dispatch('refreshPages', pages);
-    });
-
-    socket.on('disconnect', () => {
-      console.log('disconnect');
-    });
-    // axios.get('/test')
-    //   .then((e) => {
-    //     console.log(e);
-    //   });
+  async created() {
+    const res = await this.$ioclient.manualRefresh(100);
+    console.log(res);
+  },
+  methods: {
+    onRefresh() {
+      this.$ioclient.manualRefresh();
+    },
   },
 };
 

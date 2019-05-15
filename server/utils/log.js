@@ -1,10 +1,11 @@
 const tag = '[megalo-dev-tool-server]:';
 
-module.exports = function(...args) {
-  if (typeof args[0] === 'string') {
-    args[0] = `${tag} ${args[0]}`;
+module.exports = function log(...args) {
+  const params = args;
+  if (typeof params[0] === 'string') {
+    params[0] = `${tag} ${args[0]}`;
   } else {
-    args.push(tag);
+    params.push(tag);
   }
-  console.log(...args);
-}
+  console.log(...params);
+};
