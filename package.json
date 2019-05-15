@@ -1,8 +1,16 @@
 {
   "name": "@megalo/devtool",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "",
   "main": "run.js",
+  "files": [
+    "vue-plugin/**/*",
+    "webpack-plugin/**/*",
+    "shared/**/*",
+    "server/**/*",
+    "README.md",
+    "run.js"
+  ],
   "scripts": {
     "start": "npm run start:server & npm run start:client",
     "debug": "node --inspect-brk ./run.js",
