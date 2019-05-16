@@ -1,4 +1,4 @@
-const io = require('weapp.socket.io');
+const getSocket = require('./socket-io');
 
 let host;
 let port;
@@ -12,15 +12,12 @@ try {
 const url = `http://${host}:${port}/dev`
 
 let useSocketIO = false;
-const socket = io( url );
-
+const socket = getSocket(url);
 console.log(`[megalo devtool]: dev server address is ${url}`);
 
 socket.on('connect', () => {
   useSocketIO = true;
-  console.log(`[megalo devtool] connect with socket.io ${url}`);
 });
-
 
 function sendWithHttp(data) {
   return new Promise((resolve, reject) => {

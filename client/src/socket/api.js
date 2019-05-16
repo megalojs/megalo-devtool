@@ -1,6 +1,8 @@
 export async function manualRefresh() {
-  this.socket.emit('manualRefresh', 'xxx', (data) => {
-    console.log(data);
+  return new Promise((resolve) => {
+    this.socket.emit('manualRefresh', 'xxx', (pages) => {
+      resolve(pages);
+    });
   });
 }
 

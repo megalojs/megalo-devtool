@@ -6,7 +6,7 @@
       />
       <div
         class="button"
-        @click="onRefresh">
+        @click="refresh">
         refresh
       </div>
     </div>
@@ -61,12 +61,14 @@ export default {
     };
   },
   async created() {
-    const res = await this.$ioclient.manualRefresh(100);
-    console.log(res);
+    if (!this.$store.state.pages.length) {
+      await this.refresh();
+    }
   },
   methods: {
-    onRefresh() {
-      this.$ioclient.manualRefresh();
+    async refresh() {
+      const pages = await this.$ioclient.manualRefresh();
+      this.$store.dispatch('refreshPages', pages);
     },
   },
 };
@@ -77,7 +79,7 @@ export default {
 .head {
   height: 50px;
   display: flex;
-  justify-content: flex-start;
+  justify-content: space-between;
   align-items: flex-start;
   padding: 10px;
   border-bottom: 1px solid #ddd;

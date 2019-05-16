@@ -1,3 +1,4 @@
+const getSocket = require('./socket-io');
 const { send } = require('./request');
 const {
   resolveMPType,
@@ -5,6 +6,14 @@ const {
   collectVMInfo,
   collectVNode,
 } = require('./utils');
+
+const pagesCache = [];
+const socket = getSocket();
+
+socket.on('manualRefreshPages', (fn) => {
+  const pages = pagesCache.map(collectVMInfo);
+  fn(pages);
+});
 
 module.exports = {
   install(Vue, options) {
@@ -25,12 +34,15 @@ module.exports = {
       mounted() {
         const type = resolveMPType(this);
         if (type === 'page') {
-          const vm = collectVMInfo(this);
+          const data = collectVMInfo(this);
           send({
             lifecycle: 'mounted',
             type,
-            data: vm
+            data,
           });
+
+          pagesCache.push(this);
+          console.log(pagesCache);
         }
       },
       updated() {
@@ -52,6 +64,9 @@ module.exports = {
             type,
             data: vm,
           });
+
+          const index = pagesCache.findIndex(vm => vm === this);
+          pagesCache.splice(index, 1);
         }
       },
     })
