@@ -4,7 +4,11 @@
       <PageSelector
         :list="$store.state.pages"
       />
-      <button @click="onRefresh">refresh</button>
+      <div
+        class="button"
+        @click="onRefresh">
+        refresh
+      </div>
     </div>
     <div class="panel wrap">
       <div style="width:400px;">
@@ -15,19 +19,19 @@
 
       <div>
         <VMDetails
-          :vm="$store.state.selectedVM"
+          :vm="$store.state.currentVM"
         />
       </div>
 
       <div style="width:400px;">
         <VNodeBox
-          :vnode="$store.state.selectedVM && $store.state.selectedVM.vnode"
+          :vnode="$store.state.currentVM && $store.state.currentVM.vnode"
         />
       </div>
 
       <div>
         <VNodeDetails
-          :vnode="$store.state.selectedVNode"
+          :vnode="$store.state.currentVNode"
         />
       </div>
     </div>

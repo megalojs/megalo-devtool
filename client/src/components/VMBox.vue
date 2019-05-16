@@ -4,7 +4,7 @@
     v-if="vm"
     class="vmbox_tagname_wrapper"
     :style="{ 'padding-left': `${depth*10}px` }"
-    :class="{ hover: hover, selected: $store.state.selectedVM === vm }"
+    :class="{ hover: hover, selected: $store.state.currentVM === vm }"
     @mouseenter="hover = true"
     @mouseleave="hover = false"
     @click="onSelect"
@@ -48,7 +48,7 @@ export default {
   },
   data() {
     return {
-      open: false,
+      open: (!this.depth || this.depth < 2),
       hover: false,
     };
   },
@@ -60,7 +60,7 @@ export default {
   },
   methods: {
     onSelect() {
-      this.$store.dispatch('updateSelectedVM', this.vm);
+      this.$store.dispatch('updateCurrentVM', this.vm);
     },
     onHover() {
       this.hover = true;

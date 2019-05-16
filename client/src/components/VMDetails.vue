@@ -4,7 +4,7 @@
     <span v-if="vm" slot="head">
       {{ vm.name || 'Root' }}
     </span>
-    
+
     <div v-if="vm" slot="body">
       <JSONBox
         label="data"

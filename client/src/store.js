@@ -9,38 +9,32 @@ export default new Vuex.Store({
   state: {
     pages: [],
     currentRootVM: {},
-    selectedVM: {},
-    selectedVNode: {},
+    currentVM: {},
+    currentVNode: {},
   },
   mutations: {
     refreshPages(state, pages) {
-      Object.assign(state, {
-        pages,
-      });
+      Object.assign(state, { pages });
     },
     addPage(state, page) {
       state.pages.unshift(page);
     },
     removePage(state, target) {
-      const index = state.pages.findIndex(page => page.pageInfo.id === target.pageInfo.id);
+      const index = state.pages.findIndex(
+        page => page.pageInfo.id === target.pageInfo.id,
+      );
       if (index >= 0) {
         state.pages.splice(index, 1);
       }
     },
-    updateSelectedVM(state, vm) {
-      Object.assign(state, {
-        selectedVM: vm,
-      });
+    updateCurrentVM(state, vm) {
+      Object.assign(state, { currentVM: vm });
     },
-    updateSelectedVNode(state, vnode) {
-      Object.assign(state, {
-        selectedVNode: vnode || {},
-      });
+    updateCurrentVNode(state, vnode) {
+      Object.assign(state, { currentVNode: vnode });
     },
     updateCurrentRootVM(state, vm) {
-      Object.assign(state, {
-        currentRootVM: vm,
-      });
+      Object.assign(state, { currentRootVM: vm });
     },
     updateVM(state, vm) {
       const { pages } = state;
@@ -54,36 +48,33 @@ export default new Vuex.Store({
     },
   },
   actions: {
-    refreshPages({ commit }, pages) {
+    refreshPages({ commit, dispatch }, pages) {
       commit('refreshPages', pages);
-      const currentRootVM = pages[0];
-      commit('updateCurrentRootVM', currentRootVM);
-      commit('updateSelectedVM', currentRootVM);
-      commit('updateSelectedVNode', currentRootVM && currentRootVM.vnode);
+
+      dispatch('updateCurrentRootVM', pages[0]);
     },
-    addPage({ commit }, page) {
+    addPage({ commit, dispatch }, page) {
       commit('addPage', page);
-      const currentRootVM = page;
-      commit('updateCurrentRootVM', currentRootVM);
-      commit('updateSelectedVM', currentRootVM);
-      commit('updateSelectedVNode', currentRootVM && currentRootVM.vnode);
+
+      dispatch('updateCurrentRootVM', page);
     },
-    removePage({ commit, state }, page) {
+    removePage({ commit, state, dispatch }, page) {
       commit('removePage', page);
-      const currentRootVM = state.pages[0];
-      commit('updateCurrentRootVM', currentRootVM);
-      commit('updateSelectedVM', currentRootVM);
-      commit('updateSelectedVNode', currentRootVM && currentRootVM.vnode);
+
+      dispatch('updateCurrentRootVM', state.pages[0]);
     },
-    updateCurrentRootVM({ commit }, vm) {
+    updateCurrentRootVM({ commit, dispatch }, vm) {
       commit('updateCurrentRootVM', vm);
+
+      dispatch('updateCurrentVM', vm);
     },
-    updateSelectedVM({ commit }, vm) {
-      commit('updateSelectedVM', vm);
-      commit('updateSelectedVNode', vm && vm.vnode);
+    updateCurrentVM({ commit, dispatch }, vm) {
+      commit('updateCurrentVM', vm);
+
+      dispatch('updateCurrentVNode', vm && vm.vnode);
     },
-    updateSelectedVNode({ commit }, vnode) {
-      commit('updateSelectedVNode', vnode);
+    updateCurrentVNode({ commit }, vnode) {
+      commit('updateCurrentVNode', vnode);
     },
     updateVM({ commit }, vm) {
       commit('updateVM', vm);

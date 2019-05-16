@@ -1,10 +1,10 @@
 <template>
-<div>
+<div class="pageselector">
   <span style="margin-right:10px;">Page Path</span>
-  <select>
-    <option v-for="(page, i) in list" :key="i">
+  <select class="select" v-model="value" @change="onChange">
+    <option v-for="(page, i) in list" :key="i" :value="i">
       <span>{{ page.pageInfo.path }}</span>
-      <span>[{{ page.pageInfo.webviewId }}]</span>
+      <span>[{{ page.pageInfo.id }}]</span>
     </option>
   </select>
 </div>
@@ -20,6 +20,7 @@ export default {
   },
   data() {
     return {
+      value: 0,
       open: false,
     };
   },
@@ -27,16 +28,28 @@ export default {
     console.log('list', this);
   },
   methods: {
-    test() {
-      // console.log()
+    onChange() {
+      const index = this.value;
+      const page = this.list[index];
+
+      this.$store.dispatch('updateCurrentRootVM', page);
+
+      this.$emit('change', {
+        sender: this,
+        page,
+        index,
+      });
     },
-  },
-  beforeDestroy() {
-    // window.
   },
 };
 </script>
 
-<style>
-
+<style lang="less" scoped>
+.pageselector {
+  .select {
+    display: inline-block;
+    height: 30px;
+    border: none;
+  }
+}
 </style>

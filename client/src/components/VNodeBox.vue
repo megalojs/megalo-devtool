@@ -3,7 +3,7 @@
   <div
     class="vnodebox_tagname_wrapper"
     :style="{ 'padding-left': `${depth*10}px` }"
-    :class="{ hover: hover, selected: $store.state.selectedVNode === vnode }"
+    :class="{ hover: hover, selected: $store.state.currentVNode === vnode }"
     @mouseenter="hover = true"
     @mouseleave="hover = false"
     @click="onSelect"
@@ -73,7 +73,7 @@ export default {
   },
   methods: {
     onSelect() {
-      this.$store.dispatch('updateSelectedVNode', this.vnode);
+      this.$store.dispatch('updateCurrentVNode', this.vnode);
     },
   },
 };
