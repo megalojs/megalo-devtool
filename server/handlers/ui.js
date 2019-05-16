@@ -8,10 +8,18 @@ async function manualRefresh(ctx, data, fn) {
     .forEach((key) => {
       socket = sockets[key];
     });
-  socket.emit('manualRefreshPages', (pages) => {
-    log('manualRefreshPages', pages);
-    fn(pages);
-  });
+  if (socket) {
+    socket.emit('refreshPages', (pages) => {
+      log('refreshPages', pages);
+
+      pageManager.clear();
+      pages.forEach((page) => {
+        pageManager.addPage(page.pageInfo.id, page);
+      });
+
+      fn(pages);
+    });
+  }
 }
 
 function connection(ctx) {

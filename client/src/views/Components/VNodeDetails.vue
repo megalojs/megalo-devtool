@@ -21,8 +21,8 @@
 </template>
 
 <script>
-import DetailBox from './DetailBox.vue';
-import JSONBox from './JSONBox.vue';
+import DetailBox from '../../components/DetailBox.vue';
+import JSONBox from '../../components/JSONBox.vue';
 
 export default {
   components: {

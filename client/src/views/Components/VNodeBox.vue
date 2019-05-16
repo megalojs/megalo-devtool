@@ -43,7 +43,7 @@
 </template>
 
 <script>
-import '../styles/common.less';
+import '../../styles/common.less';
 
 export default {
   name: 'VNodeBox',
@@ -73,7 +73,7 @@ export default {
   },
   methods: {
     onSelect() {
-      this.$store.dispatch('updateCurrentVNode', this.vnode);
+      this.$store.dispatch('components/updateCurrentVNode', this.vnode);
     },
   },
 };

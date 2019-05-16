@@ -1,6 +1,6 @@
 <template>
-<div class="defailbox">
-  <div class="head">
+<div class="detailbox">
+  <div class="detailbox-head">
     <span style="color:#ccc;">&lt;</span>
     <span style="color:#42b983">
       <slot name="head"></slot>
@@ -24,9 +24,9 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.defailbox {
+.detailbox {
   min-width: 300px;
-  .head {
+  &-head {
     padding: 6px;
     font-size: 20px;
     font-weight: 600;

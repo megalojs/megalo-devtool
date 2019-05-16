@@ -1,10 +1,10 @@
-const doUpdateVM = require('../../shared/update-vm');
+const doUpdateComponent = require('../../shared/update-component');
 
 let pages = {};
 
 module.exports = {
-  addPage(id, vm) {
-    pages[id] = vm;
+  addPage(id, component) {
+    pages[id] = component;
   },
   getPage(id) {
     return pages[id];
@@ -18,8 +18,8 @@ module.exports = {
   clear() {
     pages = {};
   },
-  updateVM(id, vm) {
+  updateComponent(id, component) {
     const page = this.getPage(id);
-    doUpdateVM(page, vm);
+    doUpdateComponent(page && page.component, component);
   },
 };

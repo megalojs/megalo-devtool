@@ -32,7 +32,7 @@ export default {
       const index = this.value;
       const page = this.list[index];
 
-      this.$store.dispatch('updateCurrentRootVM', page);
+      this.$store.dispatch('components/updateCurrentRootComponent', page.component);
 
       this.$emit('change', {
         sender: this,

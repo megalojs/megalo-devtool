@@ -1,6 +1,6 @@
 const pageManager = require('./page-manager');
 
-const lifecycle = {
+const components = {
   launch() {
     pageManager.clear();
   },
@@ -8,7 +8,7 @@ const lifecycle = {
     pageManager.addPage(data.pageInfo.id, data);
   },
   updated(type, data) {
-    pageManager.updateVM(data.pageInfo.id, data);
+    pageManager.updateComponent(data.pageInfo.id, data.component);
   },
   beforeDestroy(type, data) {
     if (type === 'page') {
@@ -18,11 +18,11 @@ const lifecycle = {
 };
 
 module.exports = {
-  message({ io }, data) {
-    io.namespace.ui.emit('broadcast', data);
+  message({ io }, req) {
+    io.namespace.ui.emit('broadcast', req);
 
-    if (lifecycle[data.lifecycle]) {
-      lifecycle[data.lifecycle](data.type, data.data);
+    if (req.module === 'components' && components[req.lifecycle]) {
+      components[req.lifecycle](req.type, req.data);
     }
   },
 };

@@ -16,9 +16,8 @@ function collectPageInfo(vm) {
 }
 
 function collectVMInfo(vm) {
-  const info = {
+  const component = {
     name: '',
-    pageInfo: collectPageInfo(vm),
     _uid: vm._uid,
     props: vm._props,
     data: vm._data,
@@ -28,20 +27,20 @@ function collectVMInfo(vm) {
   };
 
   if (vm.$vnode) {
-    info.name = resolveComponentName(vm.$vnode.tag);
+    component.name = resolveComponentName(vm.$vnode.tag);
   }
 
-  info.children = vm.$children.map(child => {
+  component.children = vm.$children.map(child => {
     return collectVMInfo(child);
   });
 
   if (vm.$vnode && vm.$vnode.data && vm.$vnode.data.attrs) {
     const { c_, h_, f_ } = vm.$vnode.data.attrs;
-    info.componentId = c_;
-    info.holderId = h_;
-    info.forId = f_ || null;
+    component.componentId = c_;
+    component.holderId = h_;
+    component.forId = f_ || null;
   }
-  return info;
+  return component;
 }
 
 function collectVMComputed(vm) {
@@ -92,5 +91,6 @@ module.exports = {
   collectVMComputed,
   collectVMInfo,
   collectVNode,
-  resolveMPType
+  resolveMPType,
+  collectPageInfo,
 };

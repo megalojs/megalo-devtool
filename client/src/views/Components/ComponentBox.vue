@@ -4,7 +4,7 @@
     v-if="vm"
     class="vmbox_tagname_wrapper"
     :style="{ 'padding-left': `${depth*10}px` }"
-    :class="{ hover: hover, selected: $store.state.currentVM === vm }"
+    :class="{ hover: hover, selected: $store.state.currentComponent === vm }"
     @mouseenter="hover = true"
     @mouseleave="hover = false"
     @click="onSelect"
@@ -60,7 +60,7 @@ export default {
   },
   methods: {
     onSelect() {
-      this.$store.dispatch('updateCurrentVM', this.vm);
+      this.$store.dispatch('components/updateCurrentComponent', this.vm);
     },
     onHover() {
       this.hover = true;

@@ -2,31 +2,38 @@ const getSocket = require('./socket-io');
 const { send } = require('./request');
 const {
   resolveMPType,
-  collectVMComputed,
+  collectPageInfo,
   collectVMInfo,
-  collectVNode,
 } = require('./utils');
 
-const pagesCache = [];
+const rootVMCache = [];
 const socket = getSocket();
 
-socket.on('manualRefreshPages', (fn) => {
-  const pages = pagesCache.map(collectVMInfo);
-  fn(pages);
+socket.on('refreshPages', (fn) => {
+  const rootVMs = rootVMCache.map(collectVMInfo);
+  fn(rootVMs);
 });
 
 module.exports = {
+  versions: {},
   install(Vue, options) {
+    this.versions = {
+      vue: Vue.version,
+      megalo: Vue.megaloVersion,
+    };
+
     Vue.mixin({
       onLaunch() {
         send({
+          module: 'components',
           lifecycle: 'launch',
-          type: 'app'
+          type: 'app',
         });
       },
       onLoad() {
         // new page load
         send({
+          module: 'components',
           lifecycle: 'load',
           type: resolveMPType(this)
         });
@@ -34,39 +41,53 @@ module.exports = {
       mounted() {
         const type = resolveMPType(this);
         if (type === 'page') {
-          const data = collectVMInfo(this);
+          const pageInfo = collectPageInfo(this);
+          const component = collectVMInfo(this);
           send({
+            module: 'components',
             lifecycle: 'mounted',
             type,
-            data,
+            data: {
+              pageInfo,
+              component
+            },
           });
 
-          pagesCache.push(this);
-          console.log(pagesCache);
+          rootVMCache.push(this);
         }
       },
       updated() {
         if (this.$mp.page) {
-          const vm = collectVMInfo(this);
+          const pageInfo = collectPageInfo(this);
+          const component = collectVMInfo(this);
           send({
+            module: 'components',
             lifecycle: 'updated',
-            type: 'vm',
-            data: vm
+            type: 'component',
+            data: {
+              pageInfo,
+              component
+            },
           });
         }
       },
       beforeDestroy() {
         const type = resolveMPType(this);
         if (type === 'page') {
-          const vm = collectVMInfo(this);
+          const pageInfo = collectPageInfo(this);
+          const component = collectVMInfo(this);
           send({
+            module: 'components',
             lifecycle: 'beforeDestroy',
             type,
-            data: vm,
+            data: {
+              pageInfo,
+              component
+            },
           });
 
-          const index = pagesCache.findIndex(vm => vm === this);
-          pagesCache.splice(index, 1);
+          const index = rootVMCache.findIndex(vm => vm === this);
+          rootVMCache.splice(index, 1);
         }
       },
     })
