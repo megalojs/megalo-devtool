@@ -1,19 +1,25 @@
-function collectVMInfo(vm) {
-  let pageInfo = {};
+function collectPageInfo(vm) {
+  let res = {};
   if (vm.$mp.page) {
     const page = vm.$mp.page;
-    pageInfo = {
-      webviewId: page.data.__webviewId__,
-      id: page.__wxExparserNodeId__,
-      path: page.is,
-      wxExparserNodeId: page.__wxExparserNodeId__
+    const webviewId = page.data.__webviewId__;
+    const wxExparserNodeId = page.__wxExparserNodeId__;
+    const path = page.is;
+    res = {
+      id: webviewId,
+      webviewId,
+      path,
+      wxExparserNodeId,
     };
   }
+  return res;
+}
 
+function collectVMInfo(vm) {
   const info = {
-    pageInfo,
+    name: '',
+    pageInfo: collectPageInfo(vm),
     _uid: vm._uid,
-    name: 'unknown',
     props: vm._props,
     data: vm._data,
     computed: collectVMComputed(vm),
@@ -21,9 +27,7 @@ function collectVMInfo(vm) {
     vnode: collectVNode(vm._vnode)
   };
 
-  if (vm.$root === vm) {
-    info.name = 'Root'
-  } else if(vm.$vnode) {
+  if (vm.$vnode) {
     info.name = resolveComponentName(vm.$vnode.tag);
   }
 
