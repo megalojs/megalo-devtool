@@ -1,6 +1,6 @@
 <template>
 <div class="pageselector">
-  <span style="margin-right:10px;">Page Path</span>
+  <span style="margin-right:10px;">Page:</span>
   <select class="select" v-model="value" @change="onChange">
     <option v-for="(page, i) in list" :key="i" :value="i">
       <span>{{ page.pageInfo.path }}</span>
@@ -46,6 +46,7 @@ export default {
 
 <style lang="less" scoped>
 .pageselector {
+  padding: 0 6px;
   .select {
     display: inline-block;
     height: 30px;

@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="components">
     <div class="panel wrap">
       <div style="width:400px;padding-top:8px;">
         <ComponentBox
@@ -36,7 +36,7 @@ import ComponentDetails from './ComponentDetails.vue';
 import VNodeDetails from './VNodeDetails.vue';
 
 export default {
-  name: 'home',
+  name: 'Components',
   components: {
     ComponentBox,
     VNodeBox,
@@ -59,7 +59,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.home {
+.components {
   height: 100%;
   overflow: hidden;
   box-sizing: border-box;

@@ -80,10 +80,52 @@ function resolveMPType(vm) {
     return 'unknown';
   } else if (vm.$mp.page && vm === vm.$root) {
     return 'page';
-  } else if (vm.$mp.app && vm === vm.$root) {
-    return 'app';
+  } else if (vm.$mp.app && vm === vm.$root) { return 'app'; }
+   return 'vm';
+}
+
+function decycle(val, maxDepth, ignoreKeys) {
+  ignoreKeys = ignoreKeys || [];
+  const memo = [];
+  function doDecycle (val, depth) {
+    const type = typeof val;
+    if (depth > maxDepth) {
+      return '[!Exceed depth ' + maxDepth + ']';
+    }
+      
+    if (val !== null && type === 'object') {
+      if (memo.indexOf(val) !== -1) {
+        return '[!Circle]';
+      }
+      memo.push(val);
+    }
+    
+    if (Array.isArray(val)) {
+      const res = []
+      for(let i = 0; i < val.length; ++i) {
+        if (typeof val[i] !== 'function') {
+          res.push(doDecycle(val[i], depth + 1));
+        }
+      }
+      return res;
+    } else if (type === 'object') {
+      const res = {}
+      for(let k in val) {
+        if (
+          typeof val[k] !== 'function' && ignoreKeys.indexOf(k) === -1
+        ) {
+          res[k] = doDecycle(val[k], depth + 1);
+        }
+      }
+      return res;
+    } else if(type === 'function') {
+      return '[' + type + ']';
+    } else {
+      return val;
+    }
   }
-  return 'vm';
+
+  return doDecycle(val, 0);
 }
 
 module.exports = {
@@ -93,4 +135,5 @@ module.exports = {
   collectVNode,
   resolveMPType,
   collectPageInfo,
+  decycle
 };

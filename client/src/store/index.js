@@ -2,6 +2,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import components from '../views/Components/module';
+import events from '../views/Events/module';
 import * as doUpdateComponent from '../../../shared/update-component';
 
 Vue.use(Vuex);
@@ -14,9 +15,13 @@ export default new Vuex.Store({
   },
   modules: {
     components,
+    events,
   },
   mutations: {
     updateCurrentPage(state, page) {
+      if (!page.events) {
+        Object.assign(page, { events: [] });
+      }
       Object.assign(state, { currentPage: page });
     },
     refreshPages(state, pages) {
@@ -36,13 +41,26 @@ export default new Vuex.Store({
     syncVersions(state, versions) {
       Object.assign(state, { versions });
     },
-    syncComponent(state, { component, pages, pageInfo }) {
-      const page = pages.find(rootVM => (
+    syncComponent(state, { component, pageInfo }) {
+      const page = state.pages.find(rootVM => (
         rootVM.pageInfo.id === pageInfo.id
       ));
 
       if (page) {
         doUpdateComponent(page.component, component);
+      }
+    },
+    addEvent(state, data) {
+      const { pageInfo } = data;
+      const page = state.pages.find(p => (
+        p.pageInfo.id === pageInfo.id
+      ));
+
+      if (page) {
+        if (!page.events) {
+          Object.assign(page, { events: [] });
+        }
+        page.events.push(data);
       }
     },
   },
@@ -54,6 +72,7 @@ export default new Vuex.Store({
       commit('updateCurrentPage', page);
 
       dispatch('components/updateCurrentRootComponent', page.component);
+      dispatch('events/updateCurrentEvents', page.events);
     },
     refreshPages({ commit, dispatch }, pages) {
       commit('refreshPages', pages);
@@ -76,6 +95,23 @@ export default new Vuex.Store({
     syncComponent({ commit, state }, { pageInfo, component }) {
       const { pages } = state;
       commit('syncComponent', { component, pages, pageInfo });
+    },
+    addEvent({ commit }, data) {
+      const { timestamp } = data;
+      const {
+        pageInfo,
+        type,
+        event,
+        emitterName,
+      } = data.data;
+
+      commit('addEvent', {
+        pageInfo,
+        timestamp,
+        type,
+        event,
+        emitterName,
+      });
     },
   },
 });

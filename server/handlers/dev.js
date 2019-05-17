@@ -1,19 +1,19 @@
 const pageManager = require('./page-manager');
 
 const components = {
-  launch(type, data) {
+  launch(ctx, { data }) {
     pageManager.clear();
     if (data.versions) {
       pageManager.syncVersions(data.versions);
     }
   },
-  mounted(type, data) {
+  mounted(ctx, { data }) {
     pageManager.addPage(data.pageInfo.id, data);
   },
-  updated(type, data) {
+  updated(ctx, { data }) {
     pageManager.syncComponent(data.pageInfo.id, data.component);
   },
-  beforeDestroy(type, data) {
+  beforeDestroy(ctx, { type, data }) {
     if (type === 'page') {
       pageManager.removePage(data.pageInfo.id, data);
     }
@@ -21,11 +21,11 @@ const components = {
 };
 
 module.exports = {
-  message({ io }, req) {
-    io.namespace.ui.emit('broadcast', req);
+  message(ctx, req) {
+    ctx.io.namespace.ui.emit('broadcast', req);
 
     if (req.module === 'components' && components[req.lifecycle]) {
-      components[req.lifecycle](req.type, req.data);
+      components[req.lifecycle](ctx, req);
     }
   },
 };

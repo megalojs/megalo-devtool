@@ -23,7 +23,7 @@ export default class IOClient {
   use(eventName, callback) {
     const { store, socket } = this;
     socket.on(eventName, async (data) => {
-      await callback.call(this, data, store);
+      await callback.call(this, store, data);
     });
     return this;
   }

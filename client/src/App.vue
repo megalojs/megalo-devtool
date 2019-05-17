@@ -7,9 +7,17 @@
       </div>
 
       <div class="toolbox">
+        <div class="link">
+          <router-link to="/components">Components</router-link>
+        </div>
+        <div class="link">
+          <router-link to="/events">Events</router-link>
+        </div>
+        <div class="divider"></div>
         <PageSelector
           :list="pages"
         />
+        <div class="divider"></div>
         <div
           class="button"
           @click="refresh">
@@ -17,7 +25,9 @@
         </div>
       </div>
     </div>
-    <router-view/>
+    <div class="body">
+      <router-view/>
+    </div>
   </div>
 </template>
 
@@ -36,7 +46,14 @@ export default {
       'versions',
     ]),
   },
-  mounted() {},
+  mounted() {
+    setTimeout(() => {
+      this.$emit('ssss', { x: 1 });
+      this.$emit('ssss', { x: 1 });
+      this.$emit('ssss', { x: 1 });
+      this.$emit('ssss', { x: 1 });
+    }, 1000);
+  },
   methods: {
     async refresh() {
       const { versions, pages } = await this.$ioclient.manualRefresh();
@@ -48,12 +65,21 @@ export default {
 </script>
 
 <style lang="less" scoped>
+#app {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.body {
+  flex: 1;
+  overflow: hidden;
+}
 .head {
   height: 50px;
   display: flex;
+  padding: 0 10px;
   justify-content: space-between;
-  align-items: flex-start;
-  padding: 10px;
+  align-items: center;
   border-bottom: 1px solid #ddd;
   box-shadow: 0 0 8px rgba(0,0,0,0.15);
   .versions {
@@ -64,11 +90,33 @@ export default {
   }
   .toolbox {
     display: flex;
+    height: 50px;
     justify-content: flex-start;
-    align-items: flex-start;
-    >div {
-      margin-left: 20px;
+    align-items: center;
+    .link {
+      a {
+        display: inline-block;
+        padding: 0 6px;
+        height: 50px;
+        line-height: 50px;
+        color: #333;
+        font-weight: 500;
+        text-decoration: none;
+        // border-right: 1px solid #ddd;
+        &:hover {
+          background: #42b98322;
+        }
+        &.router-link-exact-active {
+          color: #42b983;
+          border-bottom: 2px solid #42b983;
+        }
+      }
     }
+  }
+  .divider {
+    height: 50px;
+    margin: 0 10px;
+    border-right: 1px solid #ddd;
   }
 }
 </style>

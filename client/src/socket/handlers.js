@@ -1,4 +1,8 @@
-function handlerComponents(req, store) {
+function handlerEvents(store, req) {
+  store.dispatch('addEvent', req);
+}
+
+function handlerComponents(store, req) {
   if (req.type === 'component') {
     store.dispatch('syncComponent', req.data);
   } else if (req.lifecycle === 'launch') {
@@ -14,13 +18,15 @@ function handlerComponents(req, store) {
   }
 }
 
-async function broadcast(req, store) {
+async function broadcast(store, req) {
   if (req.module === 'components') {
-    handlerComponents(req, store);
+    handlerComponents(store, req);
+  } else if (req.module === 'events') {
+    handlerEvents(store, req);
   }
 }
 
-async function allPage({ versions, pages }, store) {
+async function allPage(store, { versions, pages }) {
   store.dispatch('syncVersions', versions);
   store.dispatch('refreshPages', pages);
 }

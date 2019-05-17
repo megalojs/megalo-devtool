@@ -1,23 +1,24 @@
-const getSocket = require('./socket-io');
-const { send } = require('./request');
+const bridge = require('./bridge');
 const {
+  resolveComponentName,
   resolveMPType,
   collectPageInfo,
   collectVMInfo,
+  decycle,
 } = require('./utils');
 
 const rootVMCache = [];
-const socket = getSocket();
 
 let versions = {};
 
-socket.on('refreshPages', (fn) => {
+bridge.on('refreshPages', (fn) => {
   const pages = rootVMCache.map(rootVM => {
     return {
       pageInfo: collectPageInfo(rootVM),
       component: collectVMInfo(rootVM),
     };
   });
+
   fn({
     versions,
     pages,
@@ -31,9 +32,25 @@ module.exports = {
       megalo: Vue.megaloVersion,
     };
 
+    const oEmit = Vue.prototype.$emit;
+
+    Vue.prototype.$emit = function(type, data) {
+      const vm = this;
+      oEmit.call(vm, type, data);
+      handleEvent(vm, type, data, 'component');
+    }
+
+    // const oGlobalEventHandler = Vue.config.globalEventHandler;
+    // Vue.config.globalEventHandler = function(vm, data, handlers) {
+    //   if (oGlobalEventHandler) {
+    //     oGlobalEventHandler.call(this, vm, data, handlers);
+    //   }
+    //   handleEvent(vm, data.type, data);
+    // }
+
     Vue.mixin({
       onLaunch() {
-        send({
+        bridge.emit({
           module: 'components',
           lifecycle: 'launch',
           type: 'app',
@@ -44,7 +61,7 @@ module.exports = {
       },
       onLoad() {
         // new page load
-        send({
+        bridge.emit({
           module: 'components',
           lifecycle: 'load',
           type: resolveMPType(this)
@@ -55,7 +72,7 @@ module.exports = {
         if (type === 'page') {
           const pageInfo = collectPageInfo(this);
           const component = collectVMInfo(this);
-          send({
+          bridge.emit({
             module: 'components',
             lifecycle: 'mounted',
             type,
@@ -72,7 +89,7 @@ module.exports = {
         if (this.$mp.page) {
           const pageInfo = collectPageInfo(this);
           const component = collectVMInfo(this);
-          send({
+          bridge.emit({
             module: 'components',
             lifecycle: 'updated',
             type: 'component',
@@ -88,7 +105,7 @@ module.exports = {
         if (type === 'page') {
           const pageInfo = collectPageInfo(this);
           const component = collectVMInfo(this);
-          send({
+          bridge.emit({
             module: 'components',
             lifecycle: 'beforeDestroy',
             type,
@@ -104,4 +121,24 @@ module.exports = {
       },
     })
   }
+}
+
+
+function handleEvent(vm, type, data) {
+  const event = decycle(data, 20, ['_isVue', 'state', '_vm', '$store']);
+  const pageInfo = collectPageInfo(vm);
+  let emitterName = 'Root';
+  if (vm.$vnode) {
+    emitterName = resolveComponentName(vm.$vnode.tag);
+  }
+
+  bridge.emit({
+    module: 'events',
+    data: {
+      emitterName,
+      pageInfo,
+      type,
+      event
+    }
+  });
 }

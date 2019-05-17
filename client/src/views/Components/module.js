@@ -3,7 +3,6 @@ const _state = {
   currentRootComponent: {},
   currentComponent: {},
   currentVNode: {},
-  versions: {},
 };
 
 const mutations = {
