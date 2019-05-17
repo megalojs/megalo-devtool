@@ -1,6 +1,4 @@
 /* eslint-disable no-underscore-dangle */
-import * as doUpdateComponent from '../../../../shared/update-component';
-
 const _state = {
   currentRootComponent: {},
   currentComponent: {},
@@ -18,15 +16,6 @@ const mutations = {
   updateCurrentRootComponent(state, component) {
     Object.assign(state, { currentRootComponent: component });
   },
-  updateComponent(state, { component, pages, pageInfo }) {
-    const page = pages.find(rootVM => (
-      rootVM.pageInfo.id === pageInfo.id
-    ));
-
-    if (page) {
-      doUpdateComponent(page.component, component);
-    }
-  },
 };
 
 const actions = {
@@ -42,10 +31,6 @@ const actions = {
   },
   updateCurrentVNode({ commit }, vnode) {
     commit('updateCurrentVNode', vnode);
-  },
-  updateComponent({ commit, rootState }, { pageInfo, component }) {
-    const { pages } = rootState;
-    commit('updateComponent', { component, pages, pageInfo });
   },
 };
 

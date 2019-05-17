@@ -1,6 +1,6 @@
 function handlerComponents(req, store) {
   if (req.type === 'component') {
-    store.dispatch('components/updateComponent', req.data);
+    store.dispatch('syncComponent', req.data);
   } else if (req.lifecycle === 'launch') {
     store.dispatch('refreshPages', []);
   } else if (req.lifecycle === 'mounted' && req.type === 'page') {

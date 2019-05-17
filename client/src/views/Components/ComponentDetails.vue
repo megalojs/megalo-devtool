@@ -1,24 +1,24 @@
 <template>
-<div class="vmdetails">
+<div class="componentdetails">
   <DetailBox>
-    <span v-if="vm" slot="head">
-      {{ vm.name || 'Root' }}
+    <span v-if="component" slot="head">
+      {{ component.name || 'Root' }}
     </span>
 
-    <div v-if="vm" slot="body">
+    <div v-if="component" slot="body">
       <JSONBox
         label="data"
-        :data="vm.data"
+        :data="component.data"
       />
       <div class="divider"></div>
       <JSONBox
         label="props"
-        :data="vm.props"
+        :data="component.props"
       />
       <div class="divider"></div>
       <JSONBox
         label="computed"
-        :data="vm.computed"
+        :data="component.computed"
       />
     </div>
   </DetailBox>
@@ -36,7 +36,7 @@ export default {
     JSONBox,
   },
   props: {
-    vm: {
+    component: {
       type: Object,
       default: () => {},
     },
@@ -45,7 +45,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.vmdetails {
+.componentdetails {
   min-width: 300px;
 }
 </style>

@@ -3,7 +3,7 @@ function doUpdateComponent(root, component) {
   if (!root) {
     return;
   }
-  
+
   const { children } = root;
   if (root._uid === component._uid) {
     Object.assign(root, component);

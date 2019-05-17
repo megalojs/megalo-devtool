@@ -18,7 +18,7 @@ module.exports = {
   clear() {
     pages = {};
   },
-  updateComponent(id, component) {
+  syncComponent(id, component) {
     const page = this.getPage(id);
     doUpdateComponent(page && page.component, component);
   },

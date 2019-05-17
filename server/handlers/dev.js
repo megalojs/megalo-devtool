@@ -8,7 +8,7 @@ const components = {
     pageManager.addPage(data.pageInfo.id, data);
   },
   updated(type, data) {
-    pageManager.updateComponent(data.pageInfo.id, data.component);
+    pageManager.syncComponent(data.pageInfo.id, data.component);
   },
   beforeDestroy(type, data) {
     if (type === 'page') {

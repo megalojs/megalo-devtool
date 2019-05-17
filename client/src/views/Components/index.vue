@@ -3,13 +3,13 @@
     <div class="panel wrap">
       <div style="width:400px;padding-top:8px;">
         <ComponentBox
-          :vm="currentRootComponent"
+          :component="currentRootComponent"
         />
       </div>
 
       <div style="">
         <ComponentDetails
-          :vm="currentComponent"
+          :component="currentComponent"
         />
       </div>
 

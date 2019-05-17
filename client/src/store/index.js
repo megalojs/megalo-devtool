@@ -2,6 +2,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import components from '../views/Components/module';
+import * as doUpdateComponent from '../../../shared/update-component';
 
 Vue.use(Vuex);
 
@@ -35,18 +36,30 @@ export default new Vuex.Store({
     updateVersions(state, versions) {
       Object.assign(state, { versions });
     },
+    syncComponent(state, { component, pages, pageInfo }) {
+      const page = pages.find(rootVM => (
+        rootVM.pageInfo.id === pageInfo.id
+      ));
+
+      if (page) {
+        doUpdateComponent(page.component, component);
+      }
+    },
   },
   actions: {
     updateVersions({ commit }, versions) {
       commit('updateVersions', versions);
     },
-    updateCurrentPage({ commit }, page) {
+    updateCurrentPage({ commit, dispatch }, page) {
       commit('updateCurrentPage', page);
+
+      dispatch('components/updateCurrentRootComponent', page.component);
     },
     refreshPages({ commit, dispatch }, pages) {
       commit('refreshPages', pages);
 
       dispatch('updateCurrentPage', pages[0]);
+
       dispatch('components/updateCurrentRootComponent', pages[0].component);
     },
     addPage({ commit, dispatch }, page) {
@@ -58,6 +71,10 @@ export default new Vuex.Store({
       commit('removePage', page);
 
       dispatch('components/updateCurrentRootComponent', state.pages[0].component);
+    },
+    syncComponent({ commit, state }, { pageInfo, component }) {
+      const { pages } = state;
+      commit('syncComponent', { component, pages, pageInfo });
     },
   },
 });

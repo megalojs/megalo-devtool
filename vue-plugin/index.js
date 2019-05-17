@@ -10,8 +10,13 @@ const rootVMCache = [];
 const socket = getSocket();
 
 socket.on('refreshPages', (fn) => {
-  const rootVMs = rootVMCache.map(collectVMInfo);
-  fn(rootVMs);
+  const pages = rootVMCache.map(rootVM => {
+    return {
+      pageInfo: collectPageInfo(rootVM),
+      component: collectVMInfo(rootVM),
+    };
+  });
+  fn(pages);
 });
 
 module.exports = {

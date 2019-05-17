@@ -1,15 +1,15 @@
 <template>
-<div class="vmbox">
+<div class="componentbox">
   <div
-    v-if="vm"
-    class="vmbox_tagname_wrapper"
+    v-if="component"
+    class="componentbox_tagname_wrapper"
     :style="{ 'padding-left': `${depth*10}px` }"
-    :class="{ hover: hover, selected: $store.state.currentComponent === vm }"
+    :class="{ hover: hover, selected: $store.state.currentComponent === component }"
     @mouseenter="hover = true"
     @mouseleave="hover = false"
     @click="onSelect"
   >
-    <span class="vmbox_tagname">
+    <span class="componentbox_tagname">
       <span
         v-if="hasChildren"
         class="arrow-wrapper"
@@ -18,15 +18,15 @@
         <span class="arrow" :class="{ rotated: open }"></span>
       </span>
       <span style="color:#ccc;">&lt;</span>
-      <span>{{ vm.name || 'Root' }}</span>
+      <span>{{ component.name || 'Root' }}</span>
       <span style="color:#ccc;">&gt;</span>
     </span>
   </div>
   <template v-if="open && hasChildren">
     <VMBox
-      v-for="child in vm.children"
+      v-for="child in component.children"
       :key="child.id"
-      :vm="child"
+      :component="child"
       :depth="(depth || 0) + 1"
     />
   </template>
@@ -37,7 +37,7 @@
 export default {
   name: 'VMBox',
   props: {
-    vm: {
+    component: {
       type: Object,
       defaults: () => {},
     },
@@ -54,13 +54,13 @@ export default {
   },
   computed: {
     hasChildren() {
-      const host = this.vm;
+      const host = this.component;
       return host && host.children && host.children.length;
     },
   },
   methods: {
     onSelect() {
-      this.$store.dispatch('components/updateCurrentComponent', this.vm);
+      this.$store.dispatch('components/updateCurrentComponent', this.component);
     },
     onHover() {
       this.hover = true;
@@ -71,7 +71,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.vmbox {
+.componentbox {
   text-align: left;
   &_tagname_wrapper {
     cursor: pointer;
