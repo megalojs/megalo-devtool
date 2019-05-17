@@ -58,16 +58,16 @@ export default {
   box-shadow: 0 0 8px rgba(0,0,0,0.15);
   .versions {
     display: flex;
-    >span {
-      margin-right: 10px;
-    }
+    flex-direction: column;
+    font-size: 12px;
+    text-align: left;
   }
   .toolbox {
     display: flex;
     justify-content: flex-start;
     align-items: flex-start;
     >div {
-      margin-right: 10px;
+      margin-left: 20px;
     }
   }
 }

@@ -8,6 +8,7 @@ async function manualRefresh(ctx, data, fn) {
     .forEach((key) => {
       socket = sockets[key];
     });
+
   if (socket) {
     socket.emit('refreshPages', ({ pages, versions }) => {
       log('refreshPages', pages);
@@ -16,6 +17,11 @@ async function manualRefresh(ctx, data, fn) {
       pages.forEach((page) => {
         pageManager.addPage(page.pageInfo.id, page);
       });
+
+
+      if (versions.vue) {
+        pageManager.syncVersions(versions);
+      }
 
       fn({ versions, pages });
     });
