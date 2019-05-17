@@ -1,8 +1,11 @@
 const pageManager = require('./page-manager');
 
 const components = {
-  launch() {
+  launch(type, data) {
     pageManager.clear();
+    if (data.versions) {
+      pageManager.syncVersions(data.versions);
+    }
   },
   mounted(type, data) {
     pageManager.addPage(data.pageInfo.id, data);

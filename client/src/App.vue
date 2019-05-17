@@ -36,18 +36,12 @@ export default {
       'versions',
     ]),
   },
-  mounted() {
-    // setTimeout(async () => {
-    //   if (!this.pages.length) {
-    //     console.log('refresh')
-    //     await this.refresh();
-    //   }
-    // }, 5000);
-  },
+  mounted() {},
   methods: {
     async refresh() {
-      const pages = await this.$ioclient.manualRefresh();
+      const { versions, pages } = await this.$ioclient.manualRefresh();
       this.$store.dispatch('refreshPages', pages);
+      this.$store.dispatch('syncVersions', versions);
     },
   },
 };

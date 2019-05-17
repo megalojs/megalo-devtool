@@ -1,6 +1,7 @@
 const doUpdateComponent = require('../../shared/update-component');
 
 let pages = {};
+let versions = {};
 
 module.exports = {
   addPage(id, component) {
@@ -21,5 +22,11 @@ module.exports = {
   syncComponent(id, component) {
     const page = this.getPage(id);
     doUpdateComponent(page && page.component, component);
+  },
+  syncVersions(_versions) {
+    versions = _versions;
+  },
+  getVersions() {
+    return versions;
   },
 };

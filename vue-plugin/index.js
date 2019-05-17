@@ -9,6 +9,8 @@ const {
 const rootVMCache = [];
 const socket = getSocket();
 
+let versions = {};
+
 socket.on('refreshPages', (fn) => {
   const pages = rootVMCache.map(rootVM => {
     return {
@@ -16,13 +18,15 @@ socket.on('refreshPages', (fn) => {
       component: collectVMInfo(rootVM),
     };
   });
-  fn(pages);
+  fn({
+    versions,
+    pages,
+  });
 });
 
 module.exports = {
-  versions: {},
   install(Vue, options) {
-    this.versions = {
+    versions = {
       vue: Vue.version,
       megalo: Vue.megaloVersion,
     };
@@ -33,6 +37,9 @@ module.exports = {
           module: 'components',
           lifecycle: 'launch',
           type: 'app',
+          data: {
+            versions,
+          }
         });
       },
       onLoad() {

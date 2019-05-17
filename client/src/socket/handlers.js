@@ -8,19 +8,20 @@ function handlerComponents(req, store) {
   } else if (req.lifecycle === 'beforeDestroy' && req.type === 'page') {
     store.dispatch('removePage', req.data);
   }
+
+  if (req.data && req.data.versions && req.data.versions.vue) {
+    store.dispatch('syncVersions', req.data.versions);
+  }
 }
 
 async function broadcast(req, store) {
-  console.log('broadcast', req);
-
   if (req.module === 'components') {
     handlerComponents(req, store);
   }
 }
 
-async function allPage(data, store) {
-  const pages = Object.keys(data)
-    .map(id => data[id]);
+async function allPage({ versions, pages }, store) {
+  store.dispatch('syncVersions', versions);
   store.dispatch('refreshPages', pages);
 }
 

@@ -9,7 +9,7 @@ async function manualRefresh(ctx, data, fn) {
       socket = sockets[key];
     });
   if (socket) {
-    socket.emit('refreshPages', (pages) => {
+    socket.emit('refreshPages', ({ pages, versions }) => {
       log('refreshPages', pages);
 
       pageManager.clear();
@@ -17,14 +17,21 @@ async function manualRefresh(ctx, data, fn) {
         pageManager.addPage(page.pageInfo.id, page);
       });
 
-      fn(pages);
+      fn({ versions, pages });
     });
   }
 }
 
 function connection(ctx) {
-  const pages = pageManager.all();
-  ctx.client.emit('allpage', pages);
+  const pagesObj = pageManager.all();
+  const versions = pageManager.getVersions();
+  const pages = Object.keys(pagesObj)
+    .map(id => pagesObj[id]);
+
+  ctx.client.emit('allpage', {
+    versions,
+    pages,
+  });
 }
 
 module.exports = {

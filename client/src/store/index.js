@@ -33,7 +33,7 @@ export default new Vuex.Store({
         state.pages.splice(index, 1);
       }
     },
-    updateVersions(state, versions) {
+    syncVersions(state, versions) {
       Object.assign(state, { versions });
     },
     syncComponent(state, { component, pages, pageInfo }) {
@@ -47,8 +47,8 @@ export default new Vuex.Store({
     },
   },
   actions: {
-    updateVersions({ commit }, versions) {
-      commit('updateVersions', versions);
+    syncVersions({ commit }, versions) {
+      commit('syncVersions', versions);
     },
     updateCurrentPage({ commit, dispatch }, page) {
       commit('updateCurrentPage', page);
@@ -58,9 +58,10 @@ export default new Vuex.Store({
     refreshPages({ commit, dispatch }, pages) {
       commit('refreshPages', pages);
 
-      dispatch('updateCurrentPage', pages[0]);
+      const page = pages[0] || {};
+      dispatch('updateCurrentPage', page);
 
-      dispatch('components/updateCurrentRootComponent', pages[0].component);
+      dispatch('components/updateCurrentRootComponent', page.component);
     },
     addPage({ commit, dispatch }, page) {
       commit('addPage', page);
