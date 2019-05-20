@@ -4,7 +4,7 @@ function collectPageInfo(vm) {
     const page = vm.$mp.page;
     const webviewId = page.data.__webviewId__;
     const wxExparserNodeId = page.__wxExparserNodeId__;
-    const path = page.is;
+    const path = page.route;
     res = {
       id: webviewId,
       webviewId,
