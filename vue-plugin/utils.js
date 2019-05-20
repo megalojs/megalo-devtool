@@ -3,13 +3,11 @@ function collectPageInfo(vm) {
   if (vm.$mp.page) {
     const page = vm.$mp.page;
     const webviewId = page.data.__webviewId__;
-    const wxExparserNodeId = page.__wxExparserNodeId__;
     const path = page.route;
     res = {
       id: webviewId,
       webviewId,
       path,
-      wxExparserNodeId,
     };
   }
   return res;
