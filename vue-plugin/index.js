@@ -105,7 +105,7 @@ module.exports = {
 
           handleStore(this.$store, pageInfo);
 
-          rootVMCache.push(this);
+          rootVMCache.unshift(this);
         }
       },
       updated() {
