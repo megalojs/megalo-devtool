@@ -1,21 +1,15 @@
 <template>
 <div>
   <div
-    v-for="(event) in events" :key="event.timestamp"
+    v-for="(mutation) in store.mutations" :key="mutation.timestamp"
     class="event"
-    :class="{ selected: selected === event }"
-    @click="onSelect(event)"
+    :class="{ selected: selected === mutation }"
+    @click="onSelect(mutation)"
   >
     <div class="type">
-      {{ event.type }}
-      <span class="emitter">
-        $emit by
-        &lt;
-          <b>{{ event.emitterName }}</b>
-        &gt;
-      </span>
+      {{ mutation.mutation.type | mutationType }}
     </div>
-    <div class="timestamp">{{ event.timestamp | time }}</div>
+    <div class="timestamp">{{ mutation.timestamp | time }}</div>
   </div>
 </div>
 </template>
@@ -23,9 +17,9 @@
 <script>
 export default {
   props: {
-    events: {
-      type: Array,
-      default: () => [],
+    store: {
+      type: Object,
+      default: () => {},
     },
   },
   data() {
@@ -33,10 +27,18 @@ export default {
       selected: {},
     };
   },
+  filters: {
+    mutationType(t) {
+      if (t === '__devtool__:init') {
+        return 'Base State';
+      }
+      return t;
+    },
+  },
   methods: {
     onSelect(e) {
       this.selected = e;
-      this.$store.dispatch('events/updateCurrentEvent', e);
+      this.$store.dispatch('vuex/updateCurrentMutation', e);
     },
   },
 };

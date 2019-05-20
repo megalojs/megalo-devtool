@@ -1,8 +1,31 @@
-function handlerEvents(store, req) {
+function handleVuex(store, req) {
+  const { data, timestamp } = req;
+  const {
+    storeId,
+    mutation,
+    state,
+    subscribedPages,
+  } = data;
+  const payload = {
+    storeId,
+    mutation,
+    state,
+    subscribedPages,
+    timestamp,
+  };
+
+  if (mutation.type === '__devtool__:init') {
+    store.dispatch('vuex/addStore', payload);
+  } else {
+    store.dispatch('vuex/addMutation', payload);
+  }
+}
+
+function handleEvents(store, req) {
   store.dispatch('addEvent', req);
 }
 
-function handlerComponents(store, req) {
+function handleComponents(store, req) {
   if (req.type === 'component') {
     store.dispatch('syncComponent', req.data);
   } else if (req.lifecycle === 'launch') {
@@ -19,10 +42,14 @@ function handlerComponents(store, req) {
 }
 
 async function broadcast(store, req) {
-  if (req.module === 'components') {
-    handlerComponents(store, req);
-  } else if (req.module === 'events') {
-    handlerEvents(store, req);
+  const { module } = req;
+  if (module === 'components') {
+    handleComponents(store, req);
+  } else if (module === 'events') {
+    handleEvents(store, req);
+  } else if (module === 'vuex') {
+    console.log(store);
+    handleVuex(store, req);
   }
 }
 

@@ -10,7 +10,7 @@ async function manualRefresh(ctx, data, fn) {
     });
 
   if (socket) {
-    socket.emit('refreshPages', ({ pages, versions }) => {
+    socket.emit('refreshPages', ({ pages, versions, stores }) => {
       log('refreshPages', pages);
 
       pageManager.clear();
@@ -23,24 +23,11 @@ async function manualRefresh(ctx, data, fn) {
         pageManager.syncVersions(versions);
       }
 
-      fn({ versions, pages });
+      fn({ versions, pages, stores });
     });
   }
 }
 
-function connection(ctx) {
-  const pagesObj = pageManager.all();
-  const versions = pageManager.getVersions();
-  const pages = Object.keys(pagesObj)
-    .map(id => pagesObj[id]);
-
-  ctx.client.emit('allpage', {
-    versions,
-    pages,
-  });
-}
-
 module.exports = {
-  connection,
   manualRefresh,
 };

@@ -1,19 +1,22 @@
+/* eslint-disable global-require */
 /* eslint-disable no-underscore-dangle */
 import Vue from 'vue';
 import Vuex from 'vuex';
 import components from '../views/Components/module';
 import events from '../views/Events/module';
+import vuex from '../views/Vuex/module';
 import * as doUpdateComponent from '../../../shared/update-component';
 
 Vue.use(Vuex);
 
-export default new Vuex.Store({
+const store = new Vuex.Store({
   state: {
     versions: {},
     pages: [],
     currentPage: {},
   },
   modules: {
+    vuex,
     components,
     events,
   },
@@ -115,3 +118,25 @@ export default new Vuex.Store({
     },
   },
 });
+
+if (module.hot) {
+  module.hot.accept([
+    '../views/Components/module',
+    '../views/Vuex/module',
+    '../views/Events/module',
+  ], () => {
+    try {
+      store.hotUpdate({
+        modules: {
+          components: require('../views/Components/module').default,
+          vuex: require('../views/Vuex/module').default,
+          events: require('../views/Events/module').default,
+        },
+      });
+    } catch (e) {
+      console.log(e.stack);
+    }
+  });
+}
+
+export default store;

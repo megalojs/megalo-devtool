@@ -13,6 +13,9 @@
         <div class="link">
           <router-link to="/events">Events</router-link>
         </div>
+        <div class="link">
+          <router-link to="/Vuex">Vuex</router-link>
+        </div>
         <div class="divider"></div>
         <PageSelector
           :list="pages"
@@ -46,19 +49,17 @@ export default {
       'versions',
     ]),
   },
-  mounted() {
-    setTimeout(() => {
-      this.$emit('ssss', { x: 1 });
-      this.$emit('ssss', { x: 1 });
-      this.$emit('ssss', { x: 1 });
-      this.$emit('ssss', { x: 1 });
-    }, 1000);
+  async mounted() {
+    await this.refresh();
   },
   methods: {
     async refresh() {
-      const { versions, pages } = await this.$ioclient.manualRefresh();
+      const { versions, pages, stores } = await this.$ioclient.manualRefresh();
       this.$store.dispatch('refreshPages', pages);
       this.$store.dispatch('syncVersions', versions);
+      stores.forEach((store) => {
+        this.$store.dispatch('vuex/addStore', store);
+      });
     },
   },
 };

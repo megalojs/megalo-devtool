@@ -10,9 +10,29 @@ const {
 const rootVMCache = [];
 
 let versions = {};
+let storeId = 0;
 
 bridge.on('refreshPages', (fn) => {
+  const stores = [];
   const pages = rootVMCache.map(rootVM => {
+    const $store = rootVM.$store;
+
+    if ($store) {
+      const timestamp = Date.now();
+      const storeId = $store.__devtoolStoreId;
+      const subscribedPages = $store.__devtoolSubscribedPages;
+      const exist = stores.some(s => s.storeId === storeId);
+      if (!exist) {
+        stores.push({
+          storeId,
+          mutation: { type: '__devtool__:init' },
+          state: $store.state,
+          subscribedPages,
+          timestamp,
+        });
+      }
+    }
+
     return {
       pageInfo: collectPageInfo(rootVM),
       component: collectVMInfo(rootVM),
@@ -22,6 +42,7 @@ bridge.on('refreshPages', (fn) => {
   fn({
     versions,
     pages,
+    stores,
   });
 });
 
@@ -82,6 +103,8 @@ module.exports = {
             },
           });
 
+          handleStore(this.$store, pageInfo);
+
           rootVMCache.push(this);
         }
       },
@@ -98,6 +121,7 @@ module.exports = {
               component
             },
           });
+
         }
       },
       beforeDestroy() {
@@ -141,4 +165,44 @@ function handleEvent(vm, type, data) {
       event
     }
   });
+}
+
+function handleStore(store, pageInfo) {
+  if (store.__devtoolStoreId === undefined) {
+    store.__devtoolStoreId = storeId;
+    storeId++;
+  }
+
+  // record pages subscribed to this store
+  if (!store.__devtoolSubscribedPages) {
+    store.__devtoolSubscribedPages = []
+  }
+  store.__devtoolSubscribedPages.push(pageInfo)
+
+  if (store && !store.__devtoolSubscribed) {
+      const storeId = store.__devtoolStoreId;
+      const subscribedPages = store.__devtoolSubscribedPages;
+      bridge.emit({
+        module: 'vuex',
+        data: {
+          storeId,
+          mutation: { type: '__devtool__:init' },
+          state: store.state,
+          subscribedPages,
+        },
+      });
+
+      store.subscribe((mutation, state) => {
+        bridge.emit({
+          module: 'vuex',
+          data: {
+            storeId,
+            mutation,
+            state,
+            subscribedPages,
+          },
+        });
+      });
+      store.__devtoolSubscribed = true;
+  }
 }
