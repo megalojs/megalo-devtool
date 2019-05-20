@@ -1,10 +1,14 @@
 <template>
 <div class="pageselector">
-  <span style="margin-right:10px;">Page:</span>
+  <span
+    v-if="label"
+    style="margin-right:10px;"
+  >
+    {{ label }}
+  </span>
   <select class="select" v-model="value" @change="onChange">
-    <option v-for="(page, i) in list" :key="i" :value="i">
-      <span>{{ page.pageInfo.path }}</span>
-      <span>[{{ page.pageInfo.id }}]</span>
+    <option v-for="(item, i) in list" :value="i" :key="item.key">
+      <slot :page="item.pageInfo"></slot>
     </option>
   </select>
 </div>
@@ -17,6 +21,10 @@ export default {
       type: Array,
       default: () => [],
     },
+    label: {
+      type: String,
+      default: '',
+    },
   },
   data() {
     return {
@@ -24,19 +32,14 @@ export default {
       open: false,
     };
   },
-  mounted() {
-    console.log('list', this);
-  },
   methods: {
     onChange() {
       const index = this.value;
-      const page = this.list[index];
-
-      this.$store.dispatch('updateCurrentPage', page);
+      const item = this.list[index];
 
       this.$emit('change', {
         sender: this,
-        page,
+        item,
         index,
       });
     },

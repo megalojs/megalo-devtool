@@ -17,9 +17,15 @@
           <router-link to="/Vuex">Vuex</router-link>
         </div>
         <div class="divider"></div>
-        <PageSelector
+        <Selector
+          label="Page:"
           :list="pages"
-        />
+          @change="onPageChange"
+        >
+          <template v-slot="{ page }">
+            {{ page.path }} [{{ page.id }}]
+          </template>
+        </Selector>
         <div class="divider"></div>
         <div
           class="button"
@@ -37,11 +43,11 @@
 <script>
 import { mapState } from 'vuex';
 import './styles/common.less';
-import PageSelector from './components/PageSelector.vue';
+import Selector from './components/Selector.vue';
 
 export default {
   components: {
-    PageSelector,
+    Selector,
   },
   computed: {
     ...mapState([
@@ -60,6 +66,9 @@ export default {
       stores.forEach((store) => {
         this.$store.dispatch('vuex/addStore', store);
       });
+    },
+    onPageChange(e) {
+      this.$store.dispatch('updateCurrentPage', e.item);
     },
   },
 };
