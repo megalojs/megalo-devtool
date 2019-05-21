@@ -1,7 +1,18 @@
 <template>
-  <div class="events">
+  <div class="vuex">
     <div class="wrap panel">
       <div>
+        <div class="select">
+          <Selector
+            label="Store:"
+            :list="stores"
+            @change="onStoreChange"
+          >
+            <template v-slot="{ option }">
+              store [{{ option.storeId }}]
+            </template>
+          </Selector>
+        </div>
         <MutationsBox
           v-if="currentStore"
           :store="currentStore"
@@ -19,12 +30,14 @@
 
 <script>
 import { mapState } from 'vuex';
+import Selector from '../../components/Selector.vue';
 import MutationsBox from './MutationsBox.vue';
 import MutationDetails from './MutationDetails.vue';
 
 export default {
   name: 'Vuex',
   components: {
+    Selector,
     MutationsBox,
     MutationDetails,
   },
@@ -35,22 +48,28 @@ export default {
       'currentMutation',
     ]),
   },
-  data() {
-    return {
-    };
-  },
   methods: {
+    onStoreChange(e) {
+      this.$store.dispatch('vuex/updateCurrentStore', e.item);
+    },
   },
 };
 
 </script>
 
 <style lang="less" scoped>
-.events {
+.vuex {
   height: 100%;
   overflow: hidden;
   box-sizing: border-box;
   text-align: left;
+  .select {
+    display: flex;
+    align-items: center;
+    height: 40px;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+  }
 }
 .wrap {
   display: flex;
