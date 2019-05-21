@@ -14,11 +14,13 @@
       <span class="arrow" :class="{ rotated: open }"></span>
     </span>
 
-    <span style="padding-left: 15px;">
-      <span class="label">{{ label }}: </span>
+    <span style="padding-left: 16px;">
+      <span v-if="label" class="label">{{ label }}:</span>
       <span v-if="isArrayOrObject">
-        {{ dataType }}
-        <span v-if="dataType === 'Array'">[{{ data.length }}]</span>
+        <template v-if="depth !== 0">
+          {{ dataType }}
+          <span v-if="dataType === 'Array'">[{{ data.length }}]</span>
+        </template>
       </span>
       <span v-else>
         {{ data }}
