@@ -98,7 +98,9 @@ const store = new Vuex.Store({
     removePage({ commit, state, dispatch }, page) {
       commit('removePage', page);
 
-      dispatch('components/updateCurrentRootComponent', state.pages[0].component);
+      const currentPage = state.pages[0];
+      const currentComponent = (currentPage && currentPage.component) || null;
+      dispatch('components/updateCurrentRootComponent', currentComponent);
     },
     syncComponent({ commit, state }, { pageInfo, component }) {
       const { pages } = state;
