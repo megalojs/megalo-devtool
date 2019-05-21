@@ -22,8 +22,8 @@
           :list="pages"
           @change="onPageChange"
         >
-          <template v-slot="{ page }">
-            {{ page.path }} [{{ page.id }}]
+          <template v-slot="{ option }">
+            {{ option.pageInfo.path }} [{{ option.pageInfo.id }}]
           </template>
         </Selector>
         <div class="divider"></div>
