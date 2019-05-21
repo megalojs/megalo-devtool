@@ -11,12 +11,13 @@
     />
   </template>
   <template v-else>
-    empty
+    <div class="empty">No mutation selected</div>
   </template>
 </div>
 </template>
 
 <script>
+import '../../styles/common.less';
 import JSONBox from '../../components/JSONBox.vue';
 
 export default {
