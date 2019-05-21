@@ -51,3 +51,10 @@ Vue.use(DevtoolPlugin);
 - 启动小程序工程构建
 - 构建完成后，打开小程序 IDE
 - 浏览器打开地址 `http://localhost:12222`，开始使用调试
+
+
+### 界面
+
+![image](https://user-images.githubusercontent.com/8703947/58084889-474a5f00-7bee-11e9-8348-94d6b4378dc4.png)
+
+![image](https://user-images.githubusercontent.com/8703947/58084819-2a159080-7bee-11e9-88e8-81da8c7f8508.png)
