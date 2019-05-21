@@ -5,9 +5,10 @@ import Vuex from 'vuex';
 import components from '../views/Components/module';
 import events from '../views/Events/module';
 import vuex from '../views/Vuex/module';
-import * as doUpdateComponent from '../../../shared/update-component';
+import { doUpdateComponent, findComponent } from '../utils';
 
 Vue.use(Vuex);
+
 
 const store = new Vuex.Store({
   state: {
@@ -102,9 +103,22 @@ const store = new Vuex.Store({
       const currentComponent = (currentPage && currentPage.component) || null;
       dispatch('components/updateCurrentRootComponent', currentComponent);
     },
-    syncComponent({ commit, state }, { pageInfo, component }) {
-      const { pages } = state;
+    syncComponent({ commit, state, dispatch }, { pageInfo, component }) {
+      const { pages, currentPage } = state;
+      const { currentComponent } = state.components;
       commit('syncComponent', { component, pages, pageInfo });
+
+      if (
+        currentComponent
+        && currentPage
+        && currentPage.pageInfo.id === pageInfo.id
+      ) {
+        const changedInCurrentComponent = findComponent(component, currentComponent);
+        if (changedInCurrentComponent) {
+          const res = findComponent(currentPage.component, currentComponent);
+          dispatch('components/updateCurrentComponent', res);
+        }
+      }
     },
     addEvent({ commit }, data) {
       const { timestamp } = data;
