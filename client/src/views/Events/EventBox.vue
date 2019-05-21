@@ -3,7 +3,7 @@
   <div
     v-for="(event) in events" :key="event.timestamp"
     class="event"
-    :class="{ selected: selected === event }"
+    :class="{ selected: $store.state.events.currentEvent === event }"
     @click="onSelect(event)"
   >
     <div class="type">
@@ -30,12 +30,10 @@ export default {
   },
   data() {
     return {
-      selected: {},
     };
   },
   methods: {
     onSelect(e) {
-      this.selected = e;
       this.$store.dispatch('events/updateCurrentEvent', e);
     },
   },

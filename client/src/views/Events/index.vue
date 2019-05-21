@@ -7,10 +7,9 @@
         />
       </div>
       <div style="padding:10px">
-        <JSONBox
-          label="event"
-          :data="currentEvent.event"
-        ></JSONBox>
+        <EventDetails
+          :event="currentEvent"
+        />
       </div>
     </div>
   </div>
@@ -19,13 +18,13 @@
 <script>
 import { mapState } from 'vuex';
 import EventBox from './EventBox.vue';
-import JSONBox from '../../components/JSONBox.vue';
+import EventDetails from './EventDetails.vue';
 
 export default {
   name: 'Events',
   components: {
     EventBox,
-    JSONBox,
+    EventDetails,
   },
   computed: {
     ...mapState('events', [
