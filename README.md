@@ -1,5 +1,11 @@
 # megalo-devtool
 
+<p align="center">
+  <a href="https://codecov.io/gh/megalojs/megalo-devtool">
+    <img src="https://img.shields.io/npm/v/@megalo/devtool.svg?style=for-the-badge" />
+  </a>
+</p>
+
 小程序调试工具，由于小程序 IDE 不方便安装插件，因此采用另开页面的方式来对 Vue 进行调试，参考 Vue Devtool 的功能。
 
 目前支持功能：
