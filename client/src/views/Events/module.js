@@ -1,7 +1,7 @@
 /* eslint-disable no-underscore-dangle */
 const _state = {
   currentEvents: [],
-  currentEvent: {},
+  currentEvent: null,
 };
 
 const mutations = {

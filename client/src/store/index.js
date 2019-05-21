@@ -22,9 +22,6 @@ const store = new Vuex.Store({
   },
   mutations: {
     updateCurrentPage(state, page) {
-      if (!page.events) {
-        Object.assign(page, { events: [] });
-      }
       Object.assign(state, { currentPage: page });
     },
     refreshPages(state, pages) {
@@ -60,9 +57,6 @@ const store = new Vuex.Store({
       ));
 
       if (page) {
-        if (!page.events) {
-          Object.assign(page, { events: [] });
-        }
         page.events.push(data);
       }
     },
@@ -78,17 +72,28 @@ const store = new Vuex.Store({
       dispatch('events/updateCurrentEvents', page.events);
     },
     refreshPages({ commit, dispatch }, pages) {
+      pages.forEach((page) => {
+        if (!page.events) {
+          Object.assign(page, { events: [] });
+        }
+      });
+
       commit('refreshPages', pages);
 
       const page = pages[0] || {};
       dispatch('updateCurrentPage', page);
 
       dispatch('components/updateCurrentRootComponent', page.component);
+      dispatch('events/updateCurrentEvents', page.events);
     },
     addPage({ commit, dispatch }, page) {
+      if (!page.events) {
+        Object.assign(page, { events: [] });
+      }
       commit('addPage', page);
 
       dispatch('components/updateCurrentRootComponent', page.component);
+      dispatch('events/updateCurrentEvents', page.events);
     },
     removePage({ commit, state, dispatch }, page) {
       commit('removePage', page);
