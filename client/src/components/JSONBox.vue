@@ -15,7 +15,7 @@
     </span>
 
     <span style="padding-left: 16px;">
-      <span v-if="label" class="label">{{ label }}:</span>
+      <span v-if="label !== '' && label !== undefined" class="label">{{ label }}:</span>
       <span v-if="isArrayOrObject">
         <template v-if="depth !== 0">
           {{ dataType }}
