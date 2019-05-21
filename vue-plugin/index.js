@@ -168,6 +168,10 @@ function handleEvent(vm, type, data) {
 }
 
 function handleStore(store, pageInfo) {
+  if (!store) {
+    return;
+  }
+
   if (store.__devtoolStoreId === undefined) {
     store.__devtoolStoreId = storeId;
     storeId++;
