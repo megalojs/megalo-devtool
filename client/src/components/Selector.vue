@@ -8,7 +8,7 @@
   </span>
   <select class="select" v-model="value" @change="onChange">
     <option v-for="(item, i) in list" :value="i" :key="item.key">
-      <slot :page="item.pageInfo"></slot>
+      <slot :option="item"></slot>
     </option>
   </select>
 </div>
