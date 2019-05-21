@@ -57,8 +57,9 @@ const actions = {
   addMutation({ commit }, payload) {
     commit('addMutation', payload);
   },
-  updateCurrentStore({ commit }, currentStore) {
+  updateCurrentStore({ commit, dispatch }, currentStore) {
     commit('updateCurrentStore', currentStore);
+    dispatch('updateCurrentMutation', null);
   },
   updateCurrentMutation({ commit }, currentMutation) {
     commit('updateCurrentMutation', currentMutation);

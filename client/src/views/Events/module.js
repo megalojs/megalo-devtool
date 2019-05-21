@@ -14,8 +14,9 @@ const mutations = {
 };
 
 const actions = {
-  updateCurrentEvents({ commit }, currentEvents) {
+  updateCurrentEvents({ commit, dispatch }, currentEvents) {
     commit('updateCurrentEvents', currentEvents);
+    dispatch('updateCurrentEvent', null);
   },
   updateCurrentEvent({ commit }, currentEvent) {
     commit('updateCurrentEvent', currentEvent);

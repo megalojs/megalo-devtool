@@ -3,7 +3,7 @@
   <div
     v-for="(mutation) in store.mutations" :key="mutation.timestamp"
     class="event"
-    :class="{ selected: selected === mutation }"
+    :class="{ selected: $store.state.vuex.currentMutation === mutation }"
     @click="onSelect(mutation)"
   >
     <div class="type">
@@ -24,7 +24,6 @@ export default {
   },
   data() {
     return {
-      selected: {},
     };
   },
   filters: {
@@ -37,7 +36,6 @@ export default {
   },
   methods: {
     onSelect(e) {
-      this.selected = e;
       this.$store.dispatch('vuex/updateCurrentMutation', e);
     },
   },
