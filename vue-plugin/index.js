@@ -58,16 +58,22 @@ module.exports = {
     Vue.prototype.$emit = function(type, data) {
       const vm = this;
       oEmit.call(vm, type, data);
-      handleEvent(vm, type, data, 'component');
+
+      let emitterName = 'Root';
+      if (vm.$vnode) {
+        emitterName = resolveComponentName(vm.$vnode.tag);
+      }
+      handleEvent(vm, emitterName, type, data, 'component');
     }
 
-    // const oGlobalEventHandler = Vue.config.globalEventHandler;
-    // Vue.config.globalEventHandler = function(vm, data, handlers) {
-    //   if (oGlobalEventHandler) {
-    //     oGlobalEventHandler.call(this, vm, data, handlers);
-    //   }
-    //   handleEvent(vm, data.type, data);
-    // }
+    const oGlobalEventHandler = Vue.config.globalEventHandler;
+    Vue.config.globalEventHandler = function(vm, data, vnode, handlers) {
+      if (oGlobalEventHandler) {
+        oGlobalEventHandler.call(this, vm, data, vnode, handlers);
+      }
+      let emitterName = vnode.tag || 'text';
+      handleEvent(vm, emitterName, data.type, data, 'element');
+    }
 
     Vue.mixin({
       onLaunch() {
@@ -148,13 +154,9 @@ module.exports = {
 }
 
 
-function handleEvent(vm, type, data) {
+function handleEvent(vm, emitterName, type, data, emitterType) {
   const event = decycle(data, 20, ['_isVue', 'state', '_vm', '$store']);
   const pageInfo = collectPageInfo(vm);
-  let emitterName = 'Root';
-  if (vm.$vnode) {
-    emitterName = resolveComponentName(vm.$vnode.tag);
-  }
 
   bridge.emit({
     module: 'events',
@@ -162,7 +164,8 @@ function handleEvent(vm, type, data) {
       emitterName,
       pageInfo,
       type,
-      event
+      event,
+      emitterType
     }
   });
 }

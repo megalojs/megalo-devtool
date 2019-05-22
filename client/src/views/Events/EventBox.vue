@@ -10,9 +10,8 @@
       {{ event.type }}
       <span class="emitter">
         $emit by
-        &lt;
-          <b>{{ event.emitterName }}</b>
-        &gt;
+        &lt;<b>{{ event.emitterName }}</b>&gt;
+        [{{ event.emitterType }}]
       </span>
     </div>
     <div class="timestamp">{{ event.timestamp | time }}</div>
