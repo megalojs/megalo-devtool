@@ -14,7 +14,7 @@ const store = new Vuex.Store({
   state: {
     versions: {},
     pages: [],
-    currentPage: {},
+    currentPage: null,
   },
   modules: {
     vuex,
@@ -111,6 +111,7 @@ const store = new Vuex.Store({
       if (
         currentComponent
         && currentPage
+        && currentPage.pageInfo
         && currentPage.pageInfo.id === pageInfo.id
       ) {
         const changedInCurrentComponent = findComponent(component, currentComponent);
@@ -127,6 +128,7 @@ const store = new Vuex.Store({
         type,
         event,
         emitterName,
+        emitterType,
       } = data.data;
 
       commit('addEvent', {
@@ -135,6 +137,7 @@ const store = new Vuex.Store({
         type,
         event,
         emitterName,
+        emitterType,
       });
     },
   },
